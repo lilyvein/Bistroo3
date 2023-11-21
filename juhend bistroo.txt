@@ -1,0 +1,88 @@
+Mõlema appi templates kausta tegime index.html failid
+admini lehele see
+{% extends 'base_admin.html' %}
+{% block main %}
+    <h1>Kehtna bistroo</h1>
+{% endblock %}
+public lehele see: 
+{% extends 'base.html' %}
+{% block main %}
+    <h1>Kehtna bistroo</h1>
+{% endblock %}
+
+juur kasuta templates kausta tegime: base.html, bease_admin.html, menu.html
+
+public viewsse
+class HomeView(TemplateView):
+    template_name = 'app_public/index.html'
+admin viewsseclass HomeView(TemplateView):
+    template_name = 'app_admin/index.html'
+	
+mõlema appi kasuta tegemie urls.py
+adminnile 
+from django.urls import path
+from . import views
+
+app_name = 'app_admin'
+
+urlpatterns = [
+    path('', views.HomeView.as_view(), name='index'),  # homepage
+]
+
+public
+app_name = 'app_public'
+
+urlpatterns = [
+    path('', views.HomeView.as_view(), name='index'),  # homepage
+]
+
+__________________________________________--
+
+admini models.pyclass Category(models.Model):
+    number = models.IntegerField()
+    name = models.CharField(max_length=255)
+
+    def __str__(self):
+        """ Admin page show info """
+        return self.name
+
+    class Meta:
+        """ Default result ordering """
+        ordering = ['number']
+        verbose_name_plural = 'categories'
+
+admini admin.py lehele
+admin.site.register(Category)  # Admin page show Category mode
+__________________________________________--
+
+bistroo urls.py
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('app_admin/', include('app_admin.urls')),
+    path('app_public/', include('app_public.urls')),
+
+    # path('', RedirectView.as_view(url='app_admin')),  # redirect domain
+    path('', RedirectView.as_view(url='app_public')),  # redirect domain
+]
+_________________________________________________
+setting failis rida 40 ja 41
+    'app_public.apps.AppPublicConfig',
+    'app_admin.apps.AppAdminConfig',
+	
+	rida 122: STATICFILES_DIRS = ['static/']
+	
+	
+__________________________________________--
+crudi jaoks  urls, view, admin
+1. et saaks tabelisse lisada uue kategooria. template mis vormi näitamiseks. html fail.
+tee form.html   categori_form - seda saab kasutada ka uuemdamise puhul. 
+tee categori_form_create.html
+viewsse tee see:
+class SubjectCreateView(CreateView):
+    template_name = 'first_app/subject_form_create.html'
+    model = Subject
+    fields = '__all__'  # All fields into form
+    success_url = reverse_lazy('first_app:subject_list')
+
+lõpuks on vaja teha html (create, delete, form_create, list, update)

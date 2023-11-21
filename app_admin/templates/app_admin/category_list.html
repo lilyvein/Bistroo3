@@ -1,0 +1,39 @@
+{% extends 'base_admin.html' %}
+{% block main %}
+    <div class="row">
+        <div class="col-8 mx-auto">
+            <p></p>
+            <h3>Kategooriad</h3>
+            <table class="table table-bordered table-hoover">
+                <thead>
+                <tr class="text-center">
+                    <th>Number</th>
+                    <th>Kategooria nimi</th>
+                    <th>Tegevused</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for category in categories %}
+                    <tr>
+                        <td>{{ category.number }}</td>
+                        <td>{{ category.name }}</td>
+
+                        <td class="text-center">
+
+                            <a href="{% url 'app_admin:category_update' pk=category.id %}">Update</a>
+                            <a href="{% url 'app_admin:category_delete' pk=category.id %}"
+                               class="text-danger">Delete</a>
+                        </td>
+
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+            <a href="{% url 'app_admin:category_create' %}">Lisa uus kategooria</a>
+
+        </div>
+
+
+    </div>
+{% endblock %}

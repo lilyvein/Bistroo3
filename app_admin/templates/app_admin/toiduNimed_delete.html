@@ -1,0 +1,14 @@
+{% extends 'base_admin.html' %}
+{% block main %}
+	<h5 style="color:red;">Kas soovid seda toitu kustutada ?</h5>
+    <p></p>
+    <p>
+        <h4>"{{ toiduNimed.name }}"</h4>
+    </p>
+    <form method="post">
+        {% csrf_token %}
+    <input type="submit" value="Confirm Delete" class="btn btn-danger">
+    </form>
+    <p></p>
+    <p><a href="{% url 'app_admin:toiduNimed_list' %}">Kategooriate nimekiri</a></p>
+{% endblock %}

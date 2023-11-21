@@ -1,0 +1,14 @@
+{% extends 'base_admin.html' %}
+
+{% block main %}
+    <p></p>
+	<h4>Lisa uus menüü pealkiri</h4>
+    <form method="post">
+            {%  csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" value="Lisa" class="btn btn-primary">
+    </form>
+
+    <p><a href="{% url 'app_admin:menuHeadlines_list' %}">Pealkirjade list</a></p>
+    <p><a href="{% url 'app_admin:index' %}">Homepage</a></p>
+{% endblock %}

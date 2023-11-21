@@ -1,0 +1,45 @@
+{% extends 'base_admin.html' %}
+{% block main %}
+    <div class="row">
+        <div class="col-8 mx-auto">
+        <p></p>
+            <h3>Toidu nimed</h3>
+            <table class="table table-bordered table-hoover">
+                <thead>
+                <tr class="text-center">
+                    <th>Kuupäev</th>
+                    <th>Kategooria</th>
+                    <th>Toidu nimi</th>
+                    <th>Täis hind</th>
+                    <th>Pool hinda</th>
+                    <th>Näitab menüüs</th>
+                </tr>
+                </thead>
+                <tbody>
+                    {% for toiduNimed in toiduNimed %}
+                        <tr>
+                            <td>{{ toiduNimed.date }}</td>
+                            <td>{{ toiduNimed.category_ID }}</td>
+                            <td>{{ toiduNimed.food_name }}</td>
+                            <td>{{ toiduNimed.full_price }}</td>
+                            <td>{{ toiduNimed.half_price }}</td>
+                            <td>{{ toiduNimed.show_menu }}</td>
+
+                            <td class="text-center">
+
+                                    <a href="{% url 'app_admin:toiduNimed_update' pk=toiduNimed.id %}">Update</a>
+                                <a href="{% url 'app_admin:toiduNimed_delete' pk=toiduNimed.id %}" class="text-danger">Delete</a>
+                            </td>
+
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <a href="{% url 'app_admin:toiduNimed_create' %}">Lisa uus toit</a>
+
+        </div>
+
+
+    </div>
+{% endblock %}
