@@ -26,11 +26,17 @@ class HomeView(TemplateView):
     template_name = 'app_admin/index.html'
 
 
+class CategoryListView(ListView):
+    model = Category
+    queryset = Category.objects.order_by('number')
+    context_object_name = 'categories'  # default object_list now teacher
+
+
 class CategoryCreateView(CreateView):
     template_name = 'app_admin/category_form_create.html'
     model = Category
     success_url = reverse_lazy('app_admin:category_list')
-    form_class = Category
+    form_class = CategoryCreateForm
 
 
 class CategoryUpdateView(UpdateView):
@@ -55,13 +61,14 @@ class MenuHeadlinesView(WriterRequiredMixin, CreateView):
 class ToiduNimedCreateView(CreateView):
     template_name = 'app_admin/toiduNimed_create.html'
     model = ToiduNimed
-    success_url = reverse_lazy('app_admin:category_list')
+    success_url = reverse_lazy('app_admin:toiduNimed_list')
     form_class = ToiduNimedCreateForm
+
 
 class ToiduNimedListView(ListView):
     template_name = 'app_admin/toiduNimed_list.html'
     model = ToiduNimed
-    #queryset = ToiduNimed.objects.order_by('food_name')  # Result ordered by name
+    # queryset = ToiduNimed.objects.order_by('food_name')  # Result ordered by name
     context_object_name = 'toiduNimed'  # default object_list now teacher
 
 
@@ -106,5 +113,6 @@ class MenuHeadlinesCreateView(CreateView):
     #fields = '__all__'  # All fields into form
     success_url = reverse_lazy('app_admin:menuHeadlines_list')
     form_class = MenuHeadlinesCreateForm
+
 
 

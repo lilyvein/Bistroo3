@@ -59,16 +59,15 @@ class ToiduNimedCreateForm(forms.ModelForm):
 class CategoryCreateForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        #self.fields['date'].widget = forms.widgets.DateInput(attrs={'type': 'date', 'class': 'form-control mb-2'})
         self.fields['number'].label = 'Kategooria number'
         self.fields['name'].label = 'Kategooria nimi'
 
     class Meta:
         model = Category
+        fields = ('number', 'name')
         widgets = {
             'number': django.forms.TextInput(attrs={'type': 'number', 'class': 'form-control'}),
             'name': django.forms.TextInput(attrs={'type': 'text', 'class': 'form-control'}),
         }
 
-
-
+        fields = ('number', 'name')

@@ -3,7 +3,6 @@ from django.db import models
 from django.core.exceptions import ValidationError
 
 
-
 class Category(models.Model):
     number = models.IntegerField()
     name = models.CharField(max_length=255)
@@ -45,6 +44,7 @@ class ToiduNimed(models.Model):
     full_price = models.DecimalField(max_digits=4, decimal_places=2,)   # kogu numbrite arv ja komakohtade arv
     half_price = models.DecimalField(max_digits=4, decimal_places=2, null=True, blank=True)   # väljad võivad olla ka tühjad
     show_menu = models.BooleanField(default=True)
+
     def __str__(self):
         """ Admin page show info """
         return f'{self.date}, {self.category_ID}, {self.food_name}, {self.full_price}, {self.half_price}, {self.show_menu}'
