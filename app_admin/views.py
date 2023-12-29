@@ -1,8 +1,17 @@
-from django.views.generic import (TemplateView, ListView, CreateView, UpdateView, DetailView, DeleteView) # vaated mida kasutame
+import urllib.parse
+from urllib.request import urlopen
+import json
 
-from app_admin.forms import MenuHeadlinesCreateForm, ToiduNimedCreateForm, CategoryCreateForm
-from app_admin.models import Category, MenuHeadlines, ToiduNimed
 from django.urls import reverse_lazy
+from django.views.generic import (TemplateView, ListView, CreateView, UpdateView, DeleteView, DetailView, FormView)
+from django.conf import settings
+from django.contrib import messages
+from django.urls import reverse
+from django.views.generic.detail import SingleObjectMixin
+from django.http import HttpResponseRedirect
+
+from .forms import *
+from .models import *
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
 
@@ -31,18 +40,21 @@ class CategoryListView(ListView):
     queryset = Category.objects.order_by('number')
     context_object_name = 'categories'  # default object_list now teacher
 
+
 class CategoryCreateView(CreateView):
     template_name = 'app_admin/category_form_create.html'
     model = Category
     success_url = reverse_lazy('app_admin:category_list')
-    form_class = Category
+    # form_class = Category
+    fields = '__all__'
 
 
 class CategoryUpdateView(UpdateView):
     template_name = 'app_admin/category_update.html'
     model = Category
-    fields = ['number', 'name']  # update only this fields
+    # fields = ['number', 'name']  # update only this fields
     success_url = reverse_lazy('app_admin:category_list')
+    form_class = CategoryUpdateForm
 
 
 class CategoryDeleteView(DeleteView):
@@ -51,37 +63,11 @@ class CategoryDeleteView(DeleteView):
     success_url = reverse_lazy('app_admin:category_list')
 
 
+
 class MenuHeadlinesView(WriterRequiredMixin, CreateView):
     model = MenuHeadlines
     form_class = MenuHeadlinesCreateForm
     success_url = reverse_lazy('app_public:index')
-
-
-class ToiduNimedCreateView(CreateView):
-    template_name = 'app_admin/toiduNimed_create.html'
-    model = ToiduNimed
-    success_url = reverse_lazy('app_admin:category_list')
-    form_class = ToiduNimedCreateForm
-
-
-class ToiduNimedListView(ListView):
-    template_name = 'app_admin/toiduNimed_list.html'
-    model = ToiduNimed
-    # queryset = ToiduNimed.objects.order_by('food_name')  # Result ordered by name
-    context_object_name = 'toiduNimed'  # default object_list now teacher
-
-
-class ToiduNimedDeleteView(DeleteView):
-    template_name = 'app_admin/toiduNimed_delete.html'
-    model = ToiduNimed
-    success_url = reverse_lazy('app_admin:toiduNimed_list')
-
-
-class ToiduNimedUpdateView(UpdateView):
-    template_name = 'app_admin/toiduNimed_update.html'
-    model = ToiduNimed
-    fields = ['date', 'category_ID', 'food_name', 'full_price', 'half_price', 'show_menu']  # update only this fields
-    success_url = reverse_lazy('app_admin:toiduNimed_list')
 
 
 class MenuHeadlinesListView(ListView):
@@ -96,8 +82,19 @@ class MenuHeadlinesListView(ListView):
 class MenuHeadlinesUpdateView(UpdateView):
     template_name = 'app_admin/menuHeadlines_update.html'
     model = MenuHeadlines
-    fields = ['date', 'teema', 'soovitab', 'valmistas',]  # update only this fields
+    # fields = ['date', 'teema', 'soovitab', 'valmistas',]  # update only this fields
     success_url = reverse_lazy('app_admin:menuHeadlines_list')
+    form_class = MenuHeadlinesUpdateForm
+    context_object_name = 'menuHeadline'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['update'] = True  # See võimaldab mallis eristada vormi lisamise ja muutmise vahel
+        return context
+
+    def form_valid(self, form):
+        # Kui vorm on kehtiv, võite teha siin vajalikke toiminguid.
+        return super().form_valid(form)
 
 
 class MenuHeadlinesDeleteView(DeleteView):
@@ -109,8 +106,69 @@ class MenuHeadlinesDeleteView(DeleteView):
 class MenuHeadlinesCreateView(CreateView):
     template_name = 'app_admin/menuHeadlines_create.html'
     model = MenuHeadlines
-    #fields = '__all__'  # All fields into form
+    # fields = '__all__'  # All fields into form
     success_url = reverse_lazy('app_admin:menuHeadlines_list')
     form_class = MenuHeadlinesCreateForm
 
 
+class FoodMenuListView(ListView):
+    model = FoodMenu
+    template_name = 'app_admin/foodmenu_list.html'
+
+
+class FoodMenuUpdateView(SingleObjectMixin, FormView):
+    model = FoodMenu
+    form_class = FoodMenuUpdateForm
+    template_name = 'app_admin/foodmenu_update.html'
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object(queryset=FoodMenu.objects.all())
+        return super().get(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object(queryset=FoodMenu.objects.all())
+        return super().post(request, *args, **kwargs)
+
+    def get_form(self, form_class=None):
+        return FoodMenuFormset(**self.get_form_kwargs(), instance=self.object)
+
+    def form_valid(self, form):
+        form.save()
+
+        messages.add_message(
+            self.request,
+            messages.SUCCESS,
+            'Changes were saved.'
+        )
+
+        return HttpResponseRedirect(self.get_success_url())
+
+    def get_success_url(self):
+        return reverse('app_admin:foodmenu_detail', kwargs={'pk': self.object.pk})
+
+
+class FoodMenuDetailView(DetailView):
+    model = FoodMenu
+    template_name = 'app_admin/foodmenu_detail.html'
+
+
+class FoodMenuDeleteView(DeleteView):
+    model = FoodMenu
+    template_name = 'app_admin/foodmenu_delete.html'
+    success_url = reverse_lazy('app_admin:foodmenu_list')
+
+
+class FoodMenuCreateView(CreateView):
+    model = FoodMenu
+    form_class = FoodMenuCreateForm
+    template_name = 'app_admin/foodmenu_create.html'
+    # fields = ['date', 'category', ]
+
+    def form_valid(self, form):
+        messages.add_message(
+            self.request,
+            messages.SUCCESS,
+            'The author has been added'
+        )
+
+        return super().form_valid(form)

@@ -15,10 +15,11 @@ urlpatterns = [
     path('menuHeadlines_update/<int:pk>', views.MenuHeadlinesUpdateView.as_view(), name='menuHeadlines_update'),
     path('menuHeadlines_delete/<int:pk>', views.MenuHeadlinesDeleteView.as_view(), name='menuHeadlines_delete'),
 
-    path('toiduNimed_list/', views.ToiduNimedListView.as_view(), name='toiduNimed_list'),
-    path('toiduNimed_create/', views.ToiduNimedCreateView.as_view(), name='toiduNimed_create'),
-    path('toiduNimed_update/<int:pk>', views.ToiduNimedUpdateView.as_view(), name='toiduNimed_update'),
-    path('toiduNimed_delete/<int:pk>', views.ToiduNimedDeleteView.as_view(), name='toiduNimed_delete')
+    path('foodmenu_list/', views.FoodMenuListView.as_view(), name='foodmenu_list'),
+    path('foodmenu_create/', views.FoodMenuCreateView.as_view(), name='foodmenu_create'),
+    path('foodmenu_update/<int:pk>/', views.FoodMenuUpdateView.as_view(), name='foodmenu_update'),
+    path('foodmenu_detail/<int:pk>/', views.FoodMenuDetailView.as_view(), name='foodmenu_detail'),
+    path('foodmenu_delete/<int:pk>/', views.FoodMenuDeleteView.as_view(), name='foodmenu_delete'),
 
 
 ]

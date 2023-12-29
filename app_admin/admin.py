@@ -4,4 +4,6 @@ from .models import *
 
 admin.site.register(Category)  # Admin page show Category model
 admin.site.register(MenuHeadlines)  # Admin page show Menüü pealkirjasid mis tulevad  modelist
-admin.site.register(ToiduNimed)  # Admin page show Menüü pealkirjasid mis tulevad  modelist
+# admin.site.register(ToiduNimed)  # Admin page show Menüü pealkirjasid mis tulevad  modelist
+admin.site.register(FoodMenu)
+admin.site.register(FoodItem)

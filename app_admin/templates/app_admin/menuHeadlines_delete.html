@@ -1,14 +1,21 @@
 {% extends 'base_admin.html' %}
+
 {% block main %}
-    <p></p>
-	<h5 style="color:red;">Kas kustutan selle pealkirja?</h5>
+<br>
+<div class="container" style="background-color: white;">
+    <br>
+    <h3 style="color:red;">Kas kustutan selle pealkirja?</h3>
     <p>
-        <h4>"{{ menuHeadlines.name }}"</h4>
+    <h5>{{ menuheadlines.date|date:"d.m.Y" }} {{ menuheadlines.teema }}</h5>
     </p>
+    <br>
     <form method="post">
         {% csrf_token %}
-    <input type="submit" value="Confirm Delete" class="btn btn-danger">
+        <input type="submit" value="Kustuta" class="btn btn-danger">
     </form>
-    <p></p>
-    <p><a href="{% url 'app_admin:menuHeadlines_list' %}">Pealkirjade nimekiri</a></p>
+<p></p>
+    <p><a href="{% url 'app_admin:menuHeadlines_list' %}">Menüü pealkirjade nimekiri</a></p>
+    <br>
+
+</div>
 {% endblock %}

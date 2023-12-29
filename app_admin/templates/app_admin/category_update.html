@@ -1,30 +1,35 @@
 {% extends 'base_admin.html' %}
 {% block main %}
+<br>
+<div class="container" style="background-color: white;">
     <div class="row">
-        <div class="col-5 mx-auto">
+        <div class="col-12 mx-auto">
             <p></p>
             <h3>Uuenda Katekooriat <span class="fw-bold">{{ category }}</span></h3>
             <form method="post" class="form">
                 {% csrf_token %}
 
                 {% for field in form %}
-                    <div class="form-field">
-                        <label for="{{ field.id_for_label }}" class="fw-bold">{{ field.label }}</label>
-                        {% for error in field.errors %}
-                            {% if field.errors %}
-                                <div class="alert alert-danger mt-1">
-                                    {{ error }}
-                                </div>
-                            {% endif %}
-                        {% endfor %}
-                        {{ field }}
+                <div class="form-field">
+                    <label for="{{ field.id_for_label }}" class="fw-bold">{{ field.label }}</label>
+                    {% for error in field.errors %}
+                    {% if field.errors %}
+                    <div class="alert alert-danger mt-1">
+                        {{ error }}
                     </div>
+                    {% endif %}
+                    {% endfor %}
+                    {{ field }}
+                </div>
                 {% endfor %}
+                <br>
+                <input type="submit" value="Uuenda " class="btn btn-success mt-2">
 
-                <input type="submit" value="Update " class="btn btn-success mt-2">
             </form>
-
+            <br>
         </div>
 
     </div>
+</div>
+
 {% endblock %}

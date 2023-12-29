@@ -1,0 +1,16 @@
+{% extends 'base_admin.html' %}
+{% block main %}
+<br>
+ <div class="container" style="background-color: white;">
+     <br>
+    <h4 style="color:red">Kustuta menüü "{{ foodmenu }}"</h4>
+    <p></p>
+    <form method="post">
+        {% csrf_token %}
+        <input type="submit" value="Kustuta" class="btn btn-danger">
+    </form>
+     <br>
+    <p><a href="{% url 'app_admin:foodmenu_list' %}">Menüüde nimekirja</a></p>
+
+ </div>
+{% endblock %}
