@@ -1,4 +1,69 @@
-{% extends 'base.html' %}
-{% block main %}
-    <h1>Kehtna bistroo</h1>
+{% extends "base_public.html" %}
+{% load static %}
+
+{% block content %}
+<!-- app_admin/index.html -->
+<div class="row">
+    <div class="col-12 text-left mx-auto">
+        <nav class="navbar navbar-expand-lg bg-dark navbar-dark d-flex flex-column">
+            <div class="container-fluid">
+                <!-- Esimene blokk: Logo ja Kehtna bistroo tekst -->
+                <div class="navbar-text" style="color: white;">
+                    <a class="navbar-brand" href="{% url 'app_admin:index' %}">
+                        <img src="{% static 'pictures/kehtna_logo.jpg.png' %}" alt="Avatar Logo" style="width:80px;" class="rounded-pill">
+                        <span style="font-size: 38px; font-weight: bold; color:white;">Kehtna bistroo</span>
+                    </a>
+                </div>
+
+                <!-- Teine blokk: Nädalapäev ja kuupäev -->
+                <div class="navbar-text" style="color: white; font-family: 'Comic Sans MS', cursive; font-size: 26px;">
+                    {% now "l, d.m.Y" as current_date %}
+                    {{ current_date|title }}
+                </div>
+
+                <!-- Kolmas blokk: Teemapäev, soovitab, kes valmistas -->
+                {% if menuheadlines %}
+                    <div class="navbar-text" style="color: white; font-family: 'Comic Sans MS', cursive; font-size: 22px;">
+                        Teemapäev: {{ menuheadlines.0.teema | upper }}<br>
+                        Soovitab: {{ menuheadlines.0.soovitab | upper }}<br>
+                        Valmistas: {{ menuheadlines.0.valmistas | upper }}
+                    </div>
+                {% endif %}
+
+
+            </div>
+        </nav>
+    </div>
+</div>
+<br>
+
+<br>
+
+{% regroup foodmenu_items by category__name as menu_list %}
+
+{% for category in menu_list %}
+    {% if category.list %}
+        <div class="row">
+            <div class="col-12">
+                <table class="table table-sm table-bordered">
+                    <thead>
+                        <tr>
+                            <th colspan="2" class="text-left pub_head_text" style="font-size: 22px; background: #ced4da; font-family: 'Verdana', cursive;">{{ category.grouper | upper }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for subline in category.list %}
+                            <tr>
+                                <td style="font-size: 18px; background-color: #f8f9fa; font-family: 'Comic Sans MS', cursive;" class="col-6 pub_row_text">{{ subline.food_fooditem__food | upper }}</td>
+                                <td style="font-size: 18px; background-color: #f8f9fa; font-family: 'Comic Sans MS', cursive;" class="col-2 pub_row_text">{{ subline.food_fooditem__full_price | upper }}</td>
+                            </tr>
+
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    {% endif %}
+{% endfor %}
+
 {% endblock %}

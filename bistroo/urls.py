@@ -27,4 +27,6 @@ urlpatterns = [
 
     # path('', RedirectView.as_view(url='app_admin')),  # redirect domain
     path('', RedirectView.as_view(url='app_public')),  # redirect domain
+
+    path('accounts/', include('django.contrib.auth.urls')),
 ]

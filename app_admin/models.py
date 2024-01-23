@@ -67,21 +67,3 @@ class FoodItem(models.Model):
 
     def __str__(self):
         return f'{self.menu}'
-
-
-"""
-class ToiduNimed(models.Model):
-    date = models.DateField()
-    category_ID = models.ForeignKey(Category, on_delete=models.CASCADE)   # cascade kustutab kogu info sellel catekoorial
-    food_name = models.CharField(max_length=255, null=True, blank=False)
-    full_price = models.DecimalField(max_digits=4, decimal_places=2,)   # kogu numbrite arv ja komakohtade arv
-    half_price = models.DecimalField(max_digits=4, decimal_places=2, null=True, blank=True)   # väljad võivad olla ka tühjad
-    show_menu = models.BooleanField(default=True)
-    def __str__(self):
-         Admin page show info 
-        return f'{self.date}, {self.category_ID}, {self.food_name}, {self.full_price}, {self.half_price}, {self.show_menu}'
-
-    class Meta:
-         Default result ordering 
-        ordering = ['-date', 'category_ID']   # - märk annab sorteerimise nii et tuleviku kuupäevad on ennem ja vanemad allpool
-"""

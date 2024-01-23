@@ -16,7 +16,6 @@ class CategoryUpdateForm(forms.ModelForm):
         }
 
 
-
 class MenuHeadlinesCreateForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):

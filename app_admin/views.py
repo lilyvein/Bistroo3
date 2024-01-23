@@ -63,7 +63,6 @@ class CategoryDeleteView(DeleteView):
     success_url = reverse_lazy('app_admin:category_list')
 
 
-
 class MenuHeadlinesView(WriterRequiredMixin, CreateView):
     model = MenuHeadlines
     form_class = MenuHeadlinesCreateForm
@@ -109,6 +108,52 @@ class MenuHeadlinesCreateView(CreateView):
     # fields = '__all__'  # All fields into form
     success_url = reverse_lazy('app_admin:menuHeadlines_list')
     form_class = MenuHeadlinesCreateForm
+
+
+class FoodMenuCreateView(CreateView):
+    model = FoodMenu
+    form_class = FoodMenuCreateForm
+    template_name = 'app_admin/foodmenu_create.html'
+    # fields = ['date', 'category', ]
+
+    def form_valid(self, form):
+        messages.add_message(
+            self.request,
+            messages.SUCCESS,
+            'The menu has been added'
+        )
+
+        return super().form_valid(form)
+
+
+"""
+
+
+    def form_valid(self, form):
+        # Create a Menu instance and associate it with the Heading
+        menu = form.save()
+
+        # Pass the instance argument to associate the formset with the created Menu instance
+        formset = FoodMenuFormset(self.request.POST, instance=menu)
+        if formset.is_valid():
+            formset.save()
+
+            # Save the form and handle success messages
+            response = super().form_valid(form)
+            messages.success(self.request, 'The menu has been added')
+            return response
+
+        # If the formset is not valid, delete the menu instance
+        menu.delete()
+        return self.form_invalid(form)
+
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['foodmenuformset'] = FoodMenuFormset()
+        return context
+
+"""
 
 
 class FoodMenuListView(ListView):
@@ -158,17 +203,3 @@ class FoodMenuDeleteView(DeleteView):
     success_url = reverse_lazy('app_admin:foodmenu_list')
 
 
-class FoodMenuCreateView(CreateView):
-    model = FoodMenu
-    form_class = FoodMenuCreateForm
-    template_name = 'app_admin/foodmenu_create.html'
-    # fields = ['date', 'category', ]
-
-    def form_valid(self, form):
-        messages.add_message(
-            self.request,
-            messages.SUCCESS,
-            'The author has been added'
-        )
-
-        return super().form_valid(form)

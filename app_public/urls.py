@@ -4,6 +4,7 @@ from . import views
 app_name = 'app_public'
 
 urlpatterns = [
-    path('', views.HomeView.as_view(), name='index'),  # homepage
+    path("", views.show_menu, name="index"),  # avaleht
+
 
 ]
