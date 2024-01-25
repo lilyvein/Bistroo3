@@ -1,38 +1,45 @@
-from datetime import datetime
-
 from django.shortcuts import render
-from app_admin.models import FoodMenu, MenuHeadlines
+from django.views.generic import TemplateView
+from django.db.models import Q, Count
+from app_admin.models import MenuHeadlines, FoodMenu, FoodItem
 from datetime import datetime
-import locale
 
 
-def show_menu(request):
-    locale.setlocale(locale.LC_TIME, 'et_EE.utf-8')  # Eesti keele seadistamine
-    current_datetime = datetime.now()
-    date = current_datetime.date()
+class HomeViewPublic(TemplateView):
+    template_name = 'app_public/index.html'
+    model = MenuHeadlines
 
-    q_result_foodmenu = FoodMenu.objects.filter(date__date=date).values(
-        "category__name",
-        "food_fooditem__food",
-        "food_fooditem__full_price",
-        "food_fooditem__half_price"
-    ).order_by("category__number")
+    def get_context_data(self, **kwargs):
+        all_data = None  # sisaldab kogu menüü infot
+        today_string = datetime.today().strftime('%Y-%m-%d')  # 2024-01-24
+        # today_string = '2024-01-25'  # testimiseks
+        estonian_date = datetime.strptime(today_string, '%Y-%m-%d').strftime('%d.%m.%Y')
 
-    q_result_menuheadlines = MenuHeadlines.objects.filter(date=date)
-    formatted_date = current_datetime.strftime("%A, %d.%m.%Y")
+        try:
+            # https://stackoverflow.com/questions/1542878/what-to-do-when-django-query-returns-none-it-gives-me-error
+            # Kui tekib error
+            today_menu_id = MenuHeadlines.objects.get(date=today_string)  # vastuseks üks kirje või error
+            today_menuheadlines = MenuHeadlines.objects.filter(Q(date=today_string)).values('date', 'teema', 'soovitab',
+                                                                                            'valmistas')
+            today_all_categories = FoodMenu.objects.filter(date_id=today_menu_id)
 
-    for item in q_result_foodmenu:
-        if str(item["food_fooditem__full_price"]) > "0.00" and (
-                str(item["food_fooditem__half_price"]) > "0.00" and str(item["food_fooditem__half_price"]) != "None"):
-            item["food_fooditem__full_price"] = str(item["food_fooditem__full_price"]) + " / " + str(
-                item["food_fooditem__half_price"])
-        elif ((str(item["food_fooditem__full_price"]) == "0.00" and str(item["food_fooditem__half_price"]) == "0.00") or
-              (str(item["food_fooditem__full_price"]) == "0.00" and str(item["food_fooditem__half_price"]) == "None")):
-            item["food_fooditem__full_price"] = "Prae hinna sees"
+            # https://stackoverflow.com/questions/3397170/
+            all_data = (FoodItem.objects.filter(Q(menu_id__in=today_all_categories))
+                        .values('menu_id', 'food', 'full_price', 'half_price', 'show_in_menu',
+                                'menu__category__name', 'id', 'menu__category__number')
+                        .annotate(dcount=Count('menu_id')).order_by('menu__category__number', 'id'))
+            # print(today_all_categories)
+        except MenuHeadlines.DoesNotExist:
+            today_menuheadlines = None
 
-    context = {
-        "formatted_date": formatted_date,
-        'foodmenu_items': q_result_foodmenu,
-        'menuheadlines': q_result_menuheadlines,
-    }
-    return render(request, 'app_public/index.html', context)
+
+
+        context = {
+            'object_list': all_data,
+            'menuheadlines': today_menuheadlines,
+            'estonian_date': estonian_date,
+            'today_string': today_string
+
+        }
+
+        return context

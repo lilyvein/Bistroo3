@@ -86,3 +86,33 @@ class SubjectCreateView(CreateView):
     success_url = reverse_lazy('first_app:subject_list')
 
 lõpuks on vaja teha html (create, delete, form_create, list, update)
+
+Publik leht võiks käia 30 sekundi tagant refreshimas
+todiu sisestamine võiks olla suurem väli
+menus vaja näha vaid kuupäev ja kategooria
+teksti sisestamine tava kirjas aga näitamine suurte tähtedega
+tee 404 ja 500 lehed
+form peab olema div sees
+tee menüüsse eraldi arhiiv sellel kaks valikut kas kuupäevaga otsimine või sõnaga otsimine
+kui pealkiri on olemas saad sealt ja kui ei ole siis estonian date.
+kui heading on olemas siis on ka kuupäev olemas siis järelikult ka kuupäev
+kui headingut ei ole siis tänast päeva ei aga saad tänast kuupäeva näidata.
+see peaks olema esimene if else lause.
+kontrollid kas on olemas pealkiri
+kas on olemas teema päev ja kas on olemas kes valmistas jne
+kui kontrollid objekt listi siis menüüd ei ole sisestatud annab teada
+järgmine if block kui objekt list on olemas teeb menüü
+____________________________________________
+app public view.py faile
+___________________________________________
+from django.schortcuts import render
+from django.views.generic import TemplateView
+from app_admin.models import Headlines  see tuleb mudelist
+
+
+class HomeViewPublic(TemplateView):
+    template_name = 'app_public/index.html'
+    model = Heading
+
+    def get_context_data(self, **kwargs):
+        today_string = datetime.today().strftime('%d/%m/%Y')

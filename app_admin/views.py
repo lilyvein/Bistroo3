@@ -1,14 +1,17 @@
 import urllib.parse
+from datetime import datetime
 from urllib.request import urlopen
 import json
 
+from django.db.models import Count, Q
+from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import (TemplateView, ListView, CreateView, UpdateView, DeleteView, DetailView, FormView)
 from django.conf import settings
 from django.contrib import messages
 from django.urls import reverse
 from django.views.generic.detail import SingleObjectMixin
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, Http404
 
 from .forms import *
 from .models import *
@@ -126,35 +129,6 @@ class FoodMenuCreateView(CreateView):
         return super().form_valid(form)
 
 
-"""
-
-
-    def form_valid(self, form):
-        # Create a Menu instance and associate it with the Heading
-        menu = form.save()
-
-        # Pass the instance argument to associate the formset with the created Menu instance
-        formset = FoodMenuFormset(self.request.POST, instance=menu)
-        if formset.is_valid():
-            formset.save()
-
-            # Save the form and handle success messages
-            response = super().form_valid(form)
-            messages.success(self.request, 'The menu has been added')
-            return response
-
-        # If the formset is not valid, delete the menu instance
-        menu.delete()
-        return self.form_invalid(form)
-
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['foodmenuformset'] = FoodMenuFormset()
-        return context
-
-"""
-
 
 class FoodMenuListView(ListView):
     model = FoodMenu
@@ -201,5 +175,96 @@ class FoodMenuDeleteView(DeleteView):
     model = FoodMenu
     template_name = 'app_admin/foodmenu_delete.html'
     success_url = reverse_lazy('app_admin:foodmenu_list')
+
+
+class HistoryListView(ListView):
+    model = MenuHeadlines
+    template_name = 'app_admin/history_list.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(HistoryListView, self).get_context_data(**kwargs)
+        context['unique_dates'] = MenuHeadlines.objects.all()
+        return context
+
+
+class SearchResultsListView(ListView):
+    # Kuidas otsida ja ümber suunata https://stackoverflow.com/questions/62094267/redirect-if-query-has-no-result
+    model = FoodItem
+    template_name = 'app_admin/history_search.html'
+    allow_empty = False
+
+    def get_queryset(self):
+        query = self.request.GET.get('q')  # info from form
+        object_list = None
+        #  queri on formi pealt saadud väärtus
+        # https: // labpys.com / how - to - implement - join - operations - in -django - orm /
+        if len(query) > 2:
+            object_list = FoodItem.objects.select_related('menu').filter(food__icontains=query)
+
+        return object_list
+
+    def dispatch(self, request, *args, **kwargs):
+        try:
+            return super(SearchResultsListView, self).dispatch(request, *args, **kwargs)
+        except Http404:
+            return redirect('app_admin:history')
+
+
+class OldMenuListView(ListView):
+    model = MenuHeadlines
+    template_name = 'app_admin/history_menu.html'
+
+    def get_context_data(self, **kwargs):
+        all_data = None
+        query = self.request.GET.get('date')
+        # Listi vaade lisa argument
+        # https://stackoverflow.com/questions/71023649/listview-with-an-extra-argument
+        if not query:
+            query = self.kwargs['date']
+
+        # teeme kuupäeva sobivaks
+        # date_object = datetime.strptime(query, '%d.%m.%Y').date()
+        # date_object = datetime.strptime(query, '%d.%m.%Y').date()
+        # today_string = date_object.strftime('%Y-%m-%d')
+        parts = query.split('.')
+        today_string = parts[2] + '-' + parts[1] + '-' + parts[0]
+        # estonian_date = datetime.strptime(today_string, '%Y-%m-%d').strftime('%d.%m.%Y')
+        estonian_date = query
+
+        try:
+            # https://stackoverflow.com/questions/1542878/what-to-do-when-django-query-returns-none-it-gives-me-error
+            # Kui tekib error
+            today_menu_id = MenuHeadlines.objects.get(date=today_string)  # vastuseks üks kirje või error
+            today_menuheadlines = MenuHeadlines.objects.filter(Q(date=today_string)).values('date', 'teema', 'soovitab',
+                                                                                            'valmistas')
+            today_all_categories = FoodMenu.objects.filter(date_id=today_menu_id)
+
+            # https://stackoverflow.com/questions/3397170/
+            all_data = (FoodItem.objects.filter(Q(menu_id__in=today_all_categories))
+                        .values('menu_id', 'food', 'full_price', 'half_price', 'show_in_menu',
+                                'menu__category__name', 'id', 'menu__category__number')
+                        .annotate(dcount=Count('menu_id')).order_by('menu__category__number', 'id'))
+            # print(today_all_categories)
+        except MenuHeadlines.DoesNotExist:
+            today_menuheadlines = None
+
+        context = {
+            'object_list': all_data,
+            'menuheadlines': today_menuheadlines,
+            'estonian_date': estonian_date,
+            'today_string': today_string
+
+        }
+
+        return context
+
+
+
+
+
+
+
+
+
 
 

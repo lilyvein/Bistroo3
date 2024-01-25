@@ -21,5 +21,8 @@ urlpatterns = [
     path('foodmenu_detail/<int:pk>/', views.FoodMenuDetailView.as_view(), name='foodmenu_detail'),
     path('foodmenu_delete/<int:pk>/', views.FoodMenuDeleteView.as_view(), name='foodmenu_delete'),
 
+    path('history_list/', views.HistoryListView.as_view(), name='history_list'),
+    path('history_search/', views.SearchResultsListView.as_view(), name='history_search'),
+    path('history_menu/menu/', views.OldMenuListView.as_view(), name='history_menu'),
 
 ]

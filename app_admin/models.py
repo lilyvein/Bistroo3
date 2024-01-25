@@ -27,7 +27,8 @@ class MenuHeadlines(models.Model):
 
     def __str__(self):
         """ Admin page show info """
-        return f'{self.date}, {self.teema}, {self.soovitab}, {self.valmistas}'
+        #return f'{self.date}, {self.teema}, {self.soovitab}, {self.valmistas}'
+        return f'{self.date.strftime("%d.%m.%Y")}'
 
     class Meta:
         """ Default result ordering """
@@ -67,3 +68,7 @@ class FoodItem(models.Model):
 
     def __str__(self):
         return f'{self.menu}'
+
+
+
+

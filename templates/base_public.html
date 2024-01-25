@@ -1,5 +1,5 @@
 {% load static %}
-
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -13,31 +13,18 @@
     <link href="{% static 'css/bootstrap.css' %}" rel="stylesheet"/>
     <link href="{% static 'css/styles.css' %}" rel="stylesheet"/>
     <link href="{% static 'css/minu_stiilid.css' %}" rel="stylesheet">
-     <style>
-        body {
-            background-image: url("{% static 'pictures/picture_admin.jpg' %}");
-            background-repeat: no-repeat;
-            background-attachment: fixed;
-            background-size: cover;
-        }
 
-        table {
-            background-color: white; /* Määrake tabeli taustavärv valgeks */
-        }
-
-
-
-    </style>
 </head>
 <body>
 
 <!-- Page content-->
-<div class="container">
+<div class="container-fluid">
+{#    <div class="row">#}
+        {% block content %}
 
+        {% endblock %}
 
-    {% block content %}
-
-    {% endblock %}
+{#    </div>#}
 
 </div>
 <!-- Bootstrap core JS-->
