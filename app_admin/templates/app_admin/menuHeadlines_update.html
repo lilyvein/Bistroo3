@@ -1,35 +1,42 @@
 {% extends 'base_admin.html' %}
 {% block main %}
-<br>
-<div class="container" style="background-color: white;">
-    <div class="row">
-        <div class="col-8 mx-auto mt-2">
-            <p></p>
-            <h3>Uuenda pealkirjasid <span class="fw-bold">{{ menuHeadlines }}</span></h3>
-            <form method="post" class="form">
-                {% csrf_token %}
-
-                {% for field in form %}
-                <div class="form-field">
-                    <label for="{{ field.id_for_label }}" class="fw-bold">{{ field.label }}</label>
-                    {% for error in field.errors %}
-                    {% if field.errors %}
-                    <div class="alert alert-danger mt-1">
-                        {{ error }}
-                    </div>
-                    {% endif %}
+    <br>
+    <div class="container" style="background-color: white;">
+        <div class="row">
+            <div class="col-8 mx-auto mt-2">
+                <p></p>
+                <h3>Uuenda pealkirjasid <span class="fw-bold">{{ menuHeadlines }}</span></h3>
+                <form method="post" class="form">
+{#                    {{ form.as_p }}#}
+                    {% for hidden_field in form.hidden_fields %}
+                        <div class="alert alert-danger mt-1">{{ hidden_field.errors }}</div>
+                        {{ hidden_field }}
                     {% endfor %}
-                    {{ field }}
-                </div>
-                {% endfor %}
 
+                    {% csrf_token %}
+                    {{ form.non_from_errors }}
+                    {% for field in form %}
+                        <div class="form-field">
+                            <label for="{{ field.auto_id }}" class="fw-bold">{{ field.label_tag }}</label>
+{#                            <label for="{{ field.id_for_label }}" class="fw-bold">{{ field.label }}</label>#}
+                            {{ field }}
+                            {{ field.errors }}
+                            {% if field.errors %}
+                                <div class="alert alert-danger mt-1">
+                                    {{ field.errors|striptags }}
+                                </div>
+                            {% endif %}
+
+                        </div>
+                    {% endfor %}
+
+                    <br>
+                    <input type="submit" value="Uuenda " class="btn btn-success mt-2">
+                </form>
                 <br>
-                <input type="submit" value="Uuenda " class="btn btn-success mt-2">
-            </form>
-            <br>
+
+            </div>
 
         </div>
-
     </div>
-</div>
 {% endblock %}

@@ -36,8 +36,8 @@ class MenuHeadlines(models.Model):
         verbose_name_plural = 'menuheadlines'
 
     def clean(self):
-        if (self.teema is not None and self.soovitab is None) or (self.teema is None and self.soovitab is not None):
-            raise ValidationError('Teemapäev ja peakokk peavad mõlemad olema täidetud!')
+        if (self.teema is None and self.soovitab is not None) or (self.teema is not None and self.soovitab is None):
+            raise ValidationError('Teemapäev ja soovitab peavad mõlemad olema täidetud!')
 
 
 class FoodMenu(models.Model):

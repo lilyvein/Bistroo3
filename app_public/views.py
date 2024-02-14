@@ -15,6 +15,7 @@ class HomeViewPublic(TemplateView):
         # today_string = '2024-01-25'  # testimiseks
         estonian_date = datetime.strptime(today_string, '%Y-%m-%d').strftime('%d.%m.%Y')
 
+
         try:
             # https://stackoverflow.com/questions/1542878/what-to-do-when-django-query-returns-none-it-gives-me-error
             # Kui tekib error
@@ -31,8 +32,6 @@ class HomeViewPublic(TemplateView):
             # print(today_all_categories)
         except MenuHeadlines.DoesNotExist:
             today_menuheadlines = None
-
-
 
         context = {
             'object_list': all_data,

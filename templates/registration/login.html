@@ -1,0 +1,62 @@
+{% extends "base_admin.html" %}
+
+{% block main %}
+<div class="login-page bg-light" style="margin-top: 200px">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-10 offset-lg-1">
+                <h3 class="mb-3">Logi sisse</h3>
+                <div class="bg-white shadow rounded">
+                    <div class="row">
+                        <div class="col-md-7 pe-0">
+                            <div class="form-left h-100 py-5 px-5">
+                                {% if form.errors %}
+                                    <p>Sinu kasutaja nimi ja parool ei ühti. Palun proovi uuest.</p>
+                                {% endif %}
+                                {% if next %}
+                                    {% if user.is_authenticated %}
+                                        <p>Sinu kontol ei ole juurde pääsu sellele lehele . To proceed,
+                                        please login with an account that has access.</p>
+                                    {% else %}
+                                        <p>Logi sisse et, pääseda veebilehele.</p>
+                                    {% endif %}
+                                {% endif %}
+                                <form method="post" action="{% url 'login' %}" class="row g-4">
+                                    {% csrf_token %}
+                                    <div class="col-12">
+                                        <label>Kasutaja nimi<span class="text-danger">*</span></label>
+                                        <div class="input-group">
+                                            <div class="input-group-text"><i class="bi bi-person-fill"></i></div>
+                                            <input type="text" name="username" class="form-control" placeholder="Sisesta kasutajanimi" id="id_username">
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <label>Parool<span class="text-danger">*</span></label>
+                                        <div class="input-group">
+                                            <div class="input-group-text"><i class="bi bi-lock-fill"></i></div>
+                                            <input type="password" name="password" class="form-control" placeholder="Sisesta parool" id="id_password">
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <button type="submit" class="btn btn-primary px-4 float-end mt-4">Logi sisse</button>
+                                    </div>
+                                </form>
+                                <p><a href="{% url 'password_reset' %}">Ei mäleta parooli?</a></p>
+                            </div>
+                        </div>
+                        <div class="col-md-5 ps-0 d-none d-md-block">
+                            <div class="form-right h-100 bg-dark text-white text-center pt-5">
+                                <i class="bi bi-bootstrap"></i>
+                                <h1 class="fs-1">Tere tulemast </h1>
+                                <h1 class="fs-1">Kehtna Birstroo </h1>
+                                <h1 class="fs-1">lehele  </h1>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <p class="text-end text-secondary mt-3"></p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

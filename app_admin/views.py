@@ -4,7 +4,7 @@ from urllib.request import urlopen
 import json
 
 from django.db.models import Count, Q
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views.generic import (TemplateView, ListView, CreateView, UpdateView, DeleteView, DetailView, FormView)
 from django.conf import settings
@@ -18,33 +18,23 @@ from .models import *
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
 
-class WriterRequiredMixin(UserPassesTestMixin):
+class ManagerRequiredMixin(UserPassesTestMixin):
     """ Test: user in group writer create and update """
     def test_func(self):
-        return self.request.user.groups.filter(name='Writer').exists()
+        return self.request.user.groups.filter(name='Manager').exists()
 
 
-class EditorRequiredMixin(UserPassesTestMixin):
-    """ Test: delete view """
-
-    def __init__(self):
-        self.request = None
-
-    def test_func(self):
-        return self.request.user.groups.filter(name='Editor').exists()
-
-
-class HomeView(TemplateView):
+class HomeView(ManagerRequiredMixin, TemplateView):
     template_name = 'app_admin/index.html'
 
 
-class CategoryListView(ListView):
+class CategoryListView(ManagerRequiredMixin, ListView):
     model = Category
     queryset = Category.objects.order_by('number')
     context_object_name = 'categories'  # default object_list now teacher
 
 
-class CategoryCreateView(CreateView):
+class CategoryCreateView(ManagerRequiredMixin, CreateView):
     template_name = 'app_admin/category_form_create.html'
     model = Category
     success_url = reverse_lazy('app_admin:category_list')
@@ -52,7 +42,7 @@ class CategoryCreateView(CreateView):
     fields = '__all__'
 
 
-class CategoryUpdateView(UpdateView):
+class CategoryUpdateView(ManagerRequiredMixin, UpdateView):
     template_name = 'app_admin/category_update.html'
     model = Category
     # fields = ['number', 'name']  # update only this fields
@@ -60,28 +50,30 @@ class CategoryUpdateView(UpdateView):
     form_class = CategoryUpdateForm
 
 
-class CategoryDeleteView(DeleteView):
+class CategoryDeleteView(ManagerRequiredMixin, DeleteView):
     template_name = 'app_admin/category_delete.html'
     model = Category
     success_url = reverse_lazy('app_admin:category_list')
 
 
-class MenuHeadlinesView(WriterRequiredMixin, CreateView):
+class MenuHeadlinesView(ManagerRequiredMixin, CreateView):
     model = MenuHeadlines
-    form_class = MenuHeadlinesCreateForm
+    form_class = MenuHeadlinesForm
     success_url = reverse_lazy('app_public:index')
 
 
-class MenuHeadlinesListView(ListView):
+class MenuHeadlinesListView(ManagerRequiredMixin, ListView):
     template_name = 'app_admin/menuHeadlines_list.html'
     model = MenuHeadlines
     #queryset = MenuHeadlines.objects.order_by('-date')  # Result ordered by kuupäev
     #queryset = MenuHeadlines.objects.all()  # Result ordered mis on juba modeliga sorteeritud ja sellepärast pole meil nedi ridu vaja
 
     context_object_name = 'menuHeadlines'  # see tuleb viewst
+    paginate_by = 10
 
 
-class MenuHeadlinesUpdateView(UpdateView):
+class MenuHeadlinesUpdateView(ManagerRequiredMixin, UpdateView):
+
     template_name = 'app_admin/menuHeadlines_update.html'
     model = MenuHeadlines
     # fields = ['date', 'teema', 'soovitab', 'valmistas',]  # update only this fields
@@ -99,21 +91,21 @@ class MenuHeadlinesUpdateView(UpdateView):
         return super().form_valid(form)
 
 
-class MenuHeadlinesDeleteView(DeleteView):
+class MenuHeadlinesDeleteView(ManagerRequiredMixin, DeleteView):
     template_name = 'app_admin/menuHeadlines_delete.html'
     model = MenuHeadlines
     success_url = reverse_lazy('app_admin:menuHeadlines_list')
 
 
-class MenuHeadlinesCreateView(CreateView):
+class MenuHeadlinesCreateView(ManagerRequiredMixin, CreateView):
     template_name = 'app_admin/menuHeadlines_create.html'
     model = MenuHeadlines
     # fields = '__all__'  # All fields into form
     success_url = reverse_lazy('app_admin:menuHeadlines_list')
-    form_class = MenuHeadlinesCreateForm
+    form_class = MenuHeadlinesForm
 
 
-class FoodMenuCreateView(CreateView):
+class FoodMenuCreateView(ManagerRequiredMixin, CreateView):
     model = FoodMenu
     form_class = FoodMenuCreateForm
     template_name = 'app_admin/foodmenu_create.html'
@@ -129,13 +121,13 @@ class FoodMenuCreateView(CreateView):
         return super().form_valid(form)
 
 
-
-class FoodMenuListView(ListView):
+class FoodMenuListView(ManagerRequiredMixin, ListView):
     model = FoodMenu
     template_name = 'app_admin/foodmenu_list.html'
+    paginate_by = 10
 
 
-class FoodMenuUpdateView(SingleObjectMixin, FormView):
+class FoodMenuUpdateView(ManagerRequiredMixin, SingleObjectMixin, FormView):
     model = FoodMenu
     form_class = FoodMenuUpdateForm
     template_name = 'app_admin/foodmenu_update.html'
@@ -166,18 +158,18 @@ class FoodMenuUpdateView(SingleObjectMixin, FormView):
         return reverse('app_admin:foodmenu_detail', kwargs={'pk': self.object.pk})
 
 
-class FoodMenuDetailView(DetailView):
+class FoodMenuDetailView(ManagerRequiredMixin, DetailView):
     model = FoodMenu
     template_name = 'app_admin/foodmenu_detail.html'
 
 
-class FoodMenuDeleteView(DeleteView):
+class FoodMenuDeleteView(ManagerRequiredMixin, DeleteView):
     model = FoodMenu
     template_name = 'app_admin/foodmenu_delete.html'
     success_url = reverse_lazy('app_admin:foodmenu_list')
 
 
-class HistoryListView(ListView):
+class HistoryListView(ManagerRequiredMixin, ListView):
     model = MenuHeadlines
     template_name = 'app_admin/history_list.html'
 
@@ -187,11 +179,12 @@ class HistoryListView(ListView):
         return context
 
 
-class SearchResultsListView(ListView):
+class SearchResultsListView(ManagerRequiredMixin, ListView):
     # Kuidas otsida ja ümber suunata https://stackoverflow.com/questions/62094267/redirect-if-query-has-no-result
     model = FoodItem
     template_name = 'app_admin/history_search.html'
     allow_empty = False
+
 
     def get_queryset(self):
         query = self.request.GET.get('q')  # info from form
@@ -210,7 +203,7 @@ class SearchResultsListView(ListView):
             return redirect('app_admin:history')
 
 
-class OldMenuListView(ListView):
+class OldMenuListView(ManagerRequiredMixin, ListView):
     model = MenuHeadlines
     template_name = 'app_admin/history_menu.html'
 
@@ -258,13 +251,9 @@ class OldMenuListView(ListView):
 
         return context
 
+    def custom500(request, exception):
+        return render(request, '500.html', status=500)
 
-
-
-
-
-
-
-
-
+    def custom404(request, exception):
+        return render(request, '404.html', status=404)
 
