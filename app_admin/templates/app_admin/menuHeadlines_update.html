@@ -7,9 +7,13 @@
                 <p></p>
                 <h3>Uuenda pealkirjasid <span class="fw-bold">{{ menuHeadlines }}</span></h3>
                 <form method="post" class="form">
-{#                    {{ form.as_p }}#}
                     {% for hidden_field in form.hidden_fields %}
-                        <div class="alert alert-danger mt-1">{{ hidden_field.errors }}</div>
+                        <!-- Kuvage veateated ainult punasel taustal -->
+                        {% if hidden_field.errors %}
+                            <div class="alert alert-danger mt-1">
+                                {{ hidden_field.errors|striptags }}
+                            </div>
+                        {% endif %}
                         {{ hidden_field }}
                     {% endfor %}
 
@@ -18,15 +22,13 @@
                     {% for field in form %}
                         <div class="form-field">
                             <label for="{{ field.auto_id }}" class="fw-bold">{{ field.label_tag }}</label>
-{#                            <label for="{{ field.id_for_label }}" class="fw-bold">{{ field.label }}</label>#}
                             {{ field }}
-                            {{ field.errors }}
                             {% if field.errors %}
+                                <!-- Siin kuvatakse veateated punasel taustal -->
                                 <div class="alert alert-danger mt-1">
                                     {{ field.errors|striptags }}
                                 </div>
                             {% endif %}
-
                         </div>
                     {% endfor %}
 
@@ -34,9 +36,7 @@
                     <input type="submit" value="Uuenda " class="btn btn-success mt-2">
                 </form>
                 <br>
-
             </div>
-
         </div>
     </div>
 {% endblock %}

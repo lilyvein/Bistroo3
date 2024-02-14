@@ -20,36 +20,7 @@ class MenuHeadlinesForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(MenuHeadlinesForm, self).__init__(*args, **kwargs)
-        #self.fields['date'].widget = forms.widgets.TextInput(attrs={'type': 'date', 'class': 'form-control mb-2'})
-        self.fields['date'].label = 'Kuupäev'
-        self.fields['teema'].label = 'Päevateema'
-        self.fields['soovitab'].label = 'Peakokk'
-        self.fields['valmistas'].label = 'Kes valmistas'
-
-    class Meta:
-        model = MenuHeadlines
-        fields = ['date', 'teema', 'soovitab', 'valmistas']
-        widgets = {
-            'date': django.forms.TextInput(attrs={'type':'date', 'class':'form-control'}),
-            'teema': django.forms.TextInput(attrs={'type':'text', 'class':'form-control'}),
-            'soovitab': django.forms.TextInput(attrs={'type':'text', 'class':'form-control'}),
-            'valmistas': django.forms.TextInput(attrs={'type':'text', 'class':'form-control'}),
-
-        }
-
-    def clean(self):
-        super(MenuHeadlinesForm, self).clean()
-        teema = self.cleaned_data['teema']
-        soovitab = self.cleaned_data['soovitab']
-
-        if (self.teema is None and self.soovitab is not None) or (self.teema is not None and self.soovitab is None):
-            self.add_error('teema', ValidationError('Teemapäev ja soovitab peavad mõlemad olema täidetud!'))
-
-
-class MenuHeadlinesUpdateForm(forms.ModelForm):
-    def __init__(self, *args, **kwargs):
-        super(MenuHeadlinesUpdateForm, self).__init__(*args, **kwargs)
-        #self.fields['date'].widget = forms.widgets.TextInput(attrs={'type': 'date', 'class': 'form-control mb-2'})
+        # self.fields['date'].widget = forms.widgets.TextInput(attrs={'type': 'date', 'class': 'form-control mb-2'})
         self.fields['date'].label = 'Kuupäev'
         self.fields['teema'].label = 'Päevateema'
         self.fields['soovitab'].label = 'Peakokk'
@@ -67,15 +38,64 @@ class MenuHeadlinesUpdateForm(forms.ModelForm):
         }
 
     def clean(self):
-        super(MenuHeadlinesUpdateForm, self).clean()
-        # teema = self.cleaned_data['teema']
-        soovitab = self.cleaned_data['soovitab']
+        super(MenuHeadlinesForm, self).clean()
         teema = self.cleaned_data['teema']
+        soovitab = self.cleaned_data['soovitab']
 
         if (self.teema is None and self.soovitab is not None) or (self.teema is not None and self.soovitab is None):
             self.add_error('teema', ValidationError('Teemapäev ja soovitab peavad mõlemad olema täidetud!'))
 
 
+class MenuHeadlinesUpdateForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(MenuHeadlinesUpdateForm, self).__init__(*args, **kwargs)
+        # self.fields['date'].widget = forms.widgets.TextInput(attrs={'type': 'date', 'class': 'form-control mb-2'})
+        self.fields['date'].label = 'Kuupäev'
+        self.fields['teema'].label = 'Päevateema'
+        self.fields['soovitab'].label = 'Peakokk'
+        self.fields['valmistas'].label = 'Kes valmistas'
+
+    class Meta:
+        model = MenuHeadlines
+        fields = ['date', 'teema', 'soovitab', 'valmistas']
+        widgets = {
+            'date': django.forms.TextInput(attrs={'type': 'date', 'class': 'form-control'}),
+            'teema': django.forms.TextInput(attrs={'type': 'text', 'class': 'form-control'}),
+            'soovitab': django.forms.TextInput(attrs={'type': 'text', 'class': 'form-control'}),
+            'valmistas': django.forms.TextInput(attrs={'type': 'text', 'class': 'form-control'}),
+
+        }
+
+    def clean(self):
+        # super(MenuHeadlinesUpdateForm, self).clean()
+        # soovitab = self.cleaned_data['soovitab']
+        # teema = self.cleaned_data['teema']
+
+        cleaned_data = super().clean()
+        soovitab = cleaned_data.get('soovitab')
+        teema = cleaned_data.get('teema')
+
+        # if (self.teema is None and self.soovitab is not None) or (self.teema is not None and self.soovitab is None):
+        #     self.add_error('teema', 'Teemapäev ja soovitab peavad mõlemad olema täidetud!')
+        if (teema is None and soovitab is not None) or (teema is not None and soovitab is None):
+            self.add_error('teema', 'Teemapäev ja soovitab peavad mõlemad olema täidetud!')
+
+
+"""
+    def clean(self):
+        cleaned_data = super().clean()
+        soovitab = cleaned_data.get('soovitab')
+        teema = cleaned_data.get('teema')
+
+        if (teema is None or teema == '') and (soovitab is not None and soovitab != ''):
+            self.add_error('teema', 'Teemapäev ja soovitab peavad mõlemad olema !')
+            self.add_error('soovitab', 'Teemapäev ja soovitab peavad mõlemad olema täidetud!')
+        elif (teema is not None and teema != '') and (soovitab is None or soovitab == ''):
+            self.add_error('teema', 'Teemapäev ja soovitab peavad mõlemad olema täidetud!')
+            self.add_error('soovitab', 'Teemapäev ja soovitab peavad mõlemad olema täidetud!')
+
+
+"""
 
 
 class FoodMenuUpdateForm(forms.ModelForm):
@@ -118,13 +138,23 @@ class FoodMenuCreateForm(forms.ModelForm):
             'category': django.forms.Select(attrs={'class': 'form-control form-select'}),
         }
 
+    def clean(self):
+        cleaned_data = super().clean()
+        date = cleaned_data.get('date')
+        category = cleaned_data.get('category')
+
+        if FoodMenu.objects.filter(date=date, category=category).exists():
+            raise ValidationError(
+                f"Uut '{category}' kategooriat ei saa sellele kuupäevale sisestada, kuna see on juba olemas.")
+
+        return cleaned_data
+
 
 FoodMenuFormset = inlineformset_factory(
     FoodMenu,
     FoodItem,
     form=FoodMenuUpdateForm,
     fields=('food', 'full_price', 'half_price', 'show_in_menu',))
-
 
 """
 class ToiduNimedCreateForm(forms.ModelForm):

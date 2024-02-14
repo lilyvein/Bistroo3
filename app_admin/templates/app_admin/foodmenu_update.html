@@ -50,8 +50,7 @@
                     <div class="col-8">
                         <button type="submit" value="Update collection" class="btn btn-primary w-100 mb-3">Uuenda menüüd
                         </button>
-                        <a href="{{ foodmenu.get_absolute_url }}" role="button"
-                           class="btn btn-secondary w-100">Katkesta</a>
+                       <a href="{% url 'app_admin:foodmenu_list' %}" role="button" class="btn btn-secondary w-100">Toitude nimekirja</a>
                     </div>
                 </form>
                 <br>

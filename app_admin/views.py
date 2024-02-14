@@ -120,6 +120,10 @@ class FoodMenuCreateView(ManagerRequiredMixin, CreateView):
 
         return super().form_valid(form)
 
+    def form_valid(self, form):
+        messages.add_message(self.request, messages.SUCCESS, 'The menu has been added successfully.')
+        return super().form_valid(form)
+
 
 class FoodMenuListView(ManagerRequiredMixin, ListView):
     model = FoodMenu
