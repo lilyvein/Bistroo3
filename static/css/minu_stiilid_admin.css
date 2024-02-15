@@ -1,0 +1,21 @@
+{% load static %}
+
+.custom-background {
+    background-image: url("/static/pictures/food.jpg");
+    background-repeat: repeat;
+}
+
+body{
+background-image: url("/static/pictures/picture_admin.jpg");
+background-repeat: no-repeat;
+background-attachment: fixed;
+background-size: cover;
+}
+
+table {
+background-color: white; /* Määrake tabeli taustavärv valgeks */
+}
+
+.blue-text {
+color: blue;
+}

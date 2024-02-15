@@ -15,7 +15,6 @@ class HomeViewPublic(TemplateView):
         # today_string = '2024-01-25'  # testimiseks
         estonian_date = datetime.strptime(today_string, '%Y-%m-%d').strftime('%d.%m.%Y')
 
-
         try:
             # https://stackoverflow.com/questions/1542878/what-to-do-when-django-query-returns-none-it-gives-me-error
             # Kui tekib error
@@ -42,3 +41,17 @@ class HomeViewPublic(TemplateView):
         }
 
         return context
+
+
+# def custom500(request, exception):
+#     #return render(request, '500.html', status=500)
+#     response = render_to_response ('500.html', {}, context_instance=RequestContext(request))
+#     response.status_code = 500
+#     return response
+
+def custom500(request):
+    return render(request, '500.html', status=500)
+
+
+def custom404(request, exception):
+    return render(request, '404.html', status=404)

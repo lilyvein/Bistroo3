@@ -1,6 +1,6 @@
 import django.forms
 from django import forms
-from django.forms import inlineformset_factory
+from django.forms import inlineformset_factory, TextInput
 
 import bistroo.settings
 from .models import *
@@ -30,7 +30,10 @@ class MenuHeadlinesForm(forms.ModelForm):
         model = MenuHeadlines
         fields = ['date', 'teema', 'soovitab', 'valmistas']
         widgets = {
-            'date': django.forms.TextInput(attrs={'type': 'date', 'class': 'form-control'}),
+            #'date': django.forms.TextInput(attrs={'type': 'date', 'class': 'form-control'}),
+            'date': TextInput(attrs={'type': 'text',  'id': 'date', 'class': 'form-control',
+                                     'placeholder': 'Kliki kuupäeva valimiseks', 'readonly': 'readonly'}),
+
             'teema': django.forms.TextInput(attrs={'type': 'text', 'class': 'form-control'}),
             'soovitab': django.forms.TextInput(attrs={'type': 'text', 'class': 'form-control'}),
             'valmistas': django.forms.TextInput(attrs={'type': 'text', 'class': 'form-control'}),
@@ -42,7 +45,7 @@ class MenuHeadlinesForm(forms.ModelForm):
         teema = self.cleaned_data['teema']
         soovitab = self.cleaned_data['soovitab']
 
-        if (self.teema is None and self.soovitab is not None) or (self.teema is not None and self.soovitab is None):
+        if (teema is None and soovitab is not None) or (teema is not None and soovitab is None):
             self.add_error('teema', ValidationError('Teemapäev ja soovitab peavad mõlemad olema täidetud!'))
 
 
@@ -153,6 +156,7 @@ class FoodMenuCreateForm(forms.ModelForm):
 FoodMenuFormset = inlineformset_factory(
     FoodMenu,
     FoodItem,
+    extra=5,
     form=FoodMenuUpdateForm,
     fields=('food', 'full_price', 'half_price', 'show_in_menu',))
 

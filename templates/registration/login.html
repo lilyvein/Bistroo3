@@ -5,8 +5,8 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-10 offset-lg-1">
-                <h3 class="mb-3">Logi sisse</h3>
-                <div class="bg-white shadow rounded">
+                <h2 class="mt-5 mb-3" style="font-weight: bold">Sisse logimine</h2>
+                <div class="bg-white shadow rounded mb-5">
                     <div class="row">
                         <div class="col-md-7 pe-0">
                             <div class="form-left h-100 py-5 px-5">
@@ -18,20 +18,20 @@
                                         <p>Sinu kontol ei ole juurde pääsu sellele lehele . To proceed,
                                         please login with an account that has access.</p>
                                     {% else %}
-                                        <p>Logi sisse et, pääseda veebilehele.</p>
+                                        <p style="font-size: 24px;">Logi sisse et pääseda veebilehele.</p>
                                     {% endif %}
                                 {% endif %}
                                 <form method="post" action="{% url 'login' %}" class="row g-4">
                                     {% csrf_token %}
                                     <div class="col-12">
-                                        <label>Kasutaja nimi<span class="text-danger">*</span></label>
+                                        <label style="font-size: 25px;">Kasutaja nimi<span class="text-danger">*</span></label>
                                         <div class="input-group">
                                             <div class="input-group-text"><i class="bi bi-person-fill"></i></div>
                                             <input type="text" name="username" class="form-control" placeholder="Sisesta kasutajanimi" id="id_username">
                                         </div>
                                     </div>
                                     <div class="col-12">
-                                        <label>Parool<span class="text-danger">*</span></label>
+                                        <label style="font-size: 25px;">Parool<span class="text-danger">*</span></label>
                                         <div class="input-group">
                                             <div class="input-group-text"><i class="bi bi-lock-fill"></i></div>
                                             <input type="password" name="password" class="form-control" placeholder="Sisesta parool" id="id_password">

@@ -24,5 +24,7 @@ urlpatterns = [
     path('history_list/', views.HistoryListView.as_view(), name='history_list'),
     path('history_search/', views.SearchResultsListView.as_view(), name='history_search'),
     path('history_menu/menu/', views.OldMenuListView.as_view(), name='history_menu'),
+    path('history_menu/menu/date/<str:date>', views.OldMenuListView.as_view(), name='history_menu'),
+
 
 ]

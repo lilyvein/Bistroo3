@@ -24,8 +24,11 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('app_admin/', include('app_admin.urls')),
     path('app_public/', include('app_public.urls')),
-
+    path('accounts/', include('django.contrib.auth.urls')),
     path('', RedirectView.as_view(url='app_public')),  # redirect domain
 
-    path('accounts/', include('django.contrib.auth.urls')),
+
 ]
+
+handler500 = 'app_public.views.custom500'
+handler404 = 'app_public.views.custom404'

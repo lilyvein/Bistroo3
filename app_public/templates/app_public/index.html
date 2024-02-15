@@ -41,7 +41,8 @@
         {% for menu in result %}
             <table class="table-sm w-100 mb-2" style="">
                 <tr class="d-flex dark">
-                    <td class="col-8 text-info {% if forloop.counter == 1 %}text-danger{% endif %}">{{ menu.grouper|upper }}</td>
+                    {#                    <td class="col-8 text-info {% if forloop.counter == 1 %}text-danger{% endif %}">{{ menu.grouper|upper }}</td>#}
+                    <td class="col-8 text-info {% if menu.grouper|upper == 'KOOLILÕUNA (V.A SESSIOONÕPE)' %}text-danger{% endif %}">{{ menu.grouper|upper }}</td>
                 </tr>
                 {% for m in menu.list %}
                     <tr class="d-flex light">

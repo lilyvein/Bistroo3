@@ -1,43 +1,39 @@
 {% extends 'base_admin.html' %}
 {% block main %}
-    <div class="row">
-        <div class="col-8 mx-auto">
-            <p></p>
-            <h3>Teemade pealkirjad</h3>
-            <table class="table table-bordered table-hoover">
-                <thead>
-                <tr class="text-center">
-                    <th>Kuupäev</th>
-                    <th>Teema päev</th>
-                    <th>Peakokk soovitab</th>
-                    <th>Valmistas</th>
-                    <th>Tegevus</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for menuHeadline in menuHeadlines %}
-                    <tr>
-                        <td>{{ menuHeadline.date|date:"d.m.Y" }}</td>
-                        <td>{% if menuHeadline.teema %}{{ menuHeadline.teema }} {% endif %}</td>
-                        <td>{% if menuHeadline.soovitab %}{{ menuHeadline.soovitab }} {% endif %}</td>
-                        <td>{% if menuHeadline.valmistas %}{{ menuHeadline.valmistas }} {% endif %}</td>
-
-                        <td class="text-center">
-
-                            <a href="{% url 'app_admin:menuHeadlines_update' pk=menuHeadline.id %}">Uuenda</a>
-                            <a href="{% url 'app_admin:menuHeadlines_delete' pk=menuHeadline.id %}" class="text-danger">Kustuta</a>
-                        </td>
-
+    <div class="container" style="background-color: white; margin-top: 50px;">
+        <div class="row">
+            <div class="col-8 mx-auto">
+                <h3>Teemade pealkirjad</h3>
+                <table class="table table-bordered table-hoover">
+                    <thead>
+                    <tr class="text-center">
+                        <th>Kuupäev</th>
+                        <th>Teema päev</th>
+                        <th>Peakokk soovitab</th>
+                        <th>Valmistas</th>
+                        <th>Tegevus</th>
                     </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-            {% include 'pagination.html' %}
-
-            <a href="{% url 'app_admin:menuHeadlines_create' %}">Lisa uus menüü pealkiri</a>
-
+                    </thead>
+                    <tbody>
+                    {% for menuHeadline in menuHeadlines %}
+                        <tr>
+                            {#                        <td>{{ menuHeadline.date|date:"d.m.Y" }}</td>#}
+                            <td>{{ menuHeadline.date }}</td>
+                            <td>{% if menuHeadline.teema %}{{ menuHeadline.teema }} {% endif %}</td>
+                            <td>{% if menuHeadline.soovitab %}{{ menuHeadline.soovitab }} {% endif %}</td>
+                            <td>{% if menuHeadline.valmistas %}{{ menuHeadline.valmistas }} {% endif %}</td>
+                            <td class="text-center">
+                                <a href="{% url 'app_admin:menuHeadlines_update' pk=menuHeadline.id %}">Uuenda</a>
+                                <a href="{% url 'app_admin:menuHeadlines_delete' pk=menuHeadline.id %}"
+                                   class="text-danger">Kustuta</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                {% include 'pagination.html' %}
+                <a href="{% url 'app_admin:menuHeadlines_create' %}">Lisa uus menüü pealkiri</a>
+            </div>
         </div>
-
-
     </div>
 {% endblock %}

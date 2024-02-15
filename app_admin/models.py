@@ -20,7 +20,7 @@ class Category(models.Model):
 
 
 class MenuHeadlines(models.Model):
-    date = models.DateField()
+    date = models.DateField(blank=False, null=False, unique=True)
     teema = models.CharField(max_length=255, null=True, blank=True)
     soovitab = models.CharField(max_length=255, null=True, blank=True)
     valmistas = models.CharField(max_length=255, null=True, blank=True)
@@ -45,7 +45,7 @@ class FoodMenu(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
 
     class Meta:
-        ordering = ['-date', 'category_id']
+        ordering = ['date', 'category_id']
 
     def get_absolute_url(self):
         return reverse('app_admin:foodmenu_update', kwargs={'pk': self.pk})

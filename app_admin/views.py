@@ -1,5 +1,4 @@
 import urllib.parse
-from datetime import datetime
 from urllib.request import urlopen
 import json
 
@@ -12,6 +11,7 @@ from django.contrib import messages
 from django.urls import reverse
 from django.views.generic.detail import SingleObjectMixin
 from django.http import HttpResponseRedirect, Http404
+import datetime
 
 from .forms import *
 from .models import *
@@ -38,8 +38,8 @@ class CategoryCreateView(ManagerRequiredMixin, CreateView):
     template_name = 'app_admin/category_form_create.html'
     model = Category
     success_url = reverse_lazy('app_admin:category_list')
-    # form_class = Category
-    fields = '__all__'
+    form_class = CategoryUpdateForm
+    #fields = '__all__'
 
 
 class CategoryUpdateView(ManagerRequiredMixin, UpdateView):
@@ -54,6 +54,7 @@ class CategoryDeleteView(ManagerRequiredMixin, DeleteView):
     template_name = 'app_admin/category_delete.html'
     model = Category
     success_url = reverse_lazy('app_admin:category_list')
+    form_class = CategoryUpdateForm
 
 
 class MenuHeadlinesView(ManagerRequiredMixin, CreateView):
@@ -66,7 +67,8 @@ class MenuHeadlinesListView(ManagerRequiredMixin, ListView):
     template_name = 'app_admin/menuHeadlines_list.html'
     model = MenuHeadlines
     #queryset = MenuHeadlines.objects.order_by('-date')  # Result ordered by kuupäev
-    #queryset = MenuHeadlines.objects.all()  # Result ordered mis on juba modeliga sorteeritud ja sellepärast pole meil nedi ridu vaja
+    #queryset = MenuHeadlines.objects.all()  # Result ordered mis on juba modeliga sorteeritud ja
+    # sellepärast pole meil nedi ridu vaja
 
     context_object_name = 'menuHeadlines'  # see tuleb viewst
     paginate_by = 10
@@ -104,6 +106,19 @@ class MenuHeadlinesCreateView(ManagerRequiredMixin, CreateView):
     success_url = reverse_lazy('app_admin:menuHeadlines_list')
     form_class = MenuHeadlinesForm
 
+    def post(self, request, *args, **kwargs):
+        my_data = request.POST
+        my_date = my_data['date']
+        print(my_date)
+        try:
+            new_date = datetime.datetime.strptime(my_date, '%d.%m.%Y').strftime('%Y-%m-%d')
+            my_data._mutable = True
+            my_data['date'] = new_date
+            my_data._mutable = False
+        except ValueError:
+            return super().post(request, *args, **kwargs)
+        return super().post(request, *args, **kwargs)
+
 
 class FoodMenuCreateView(ManagerRequiredMixin, CreateView):
     model = FoodMenu
@@ -120,10 +135,6 @@ class FoodMenuCreateView(ManagerRequiredMixin, CreateView):
 
         return super().form_valid(form)
 
-    def form_valid(self, form):
-        messages.add_message(self.request, messages.SUCCESS, 'The menu has been added successfully.')
-        return super().form_valid(form)
-
 
 class FoodMenuListView(ManagerRequiredMixin, ListView):
     model = FoodMenu
@@ -135,6 +146,7 @@ class FoodMenuUpdateView(ManagerRequiredMixin, SingleObjectMixin, FormView):
     model = FoodMenu
     form_class = FoodMenuUpdateForm
     template_name = 'app_admin/foodmenu_update.html'
+
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object(queryset=FoodMenu.objects.all())
@@ -188,7 +200,6 @@ class SearchResultsListView(ManagerRequiredMixin, ListView):
     model = FoodItem
     template_name = 'app_admin/history_search.html'
     allow_empty = False
-
 
     def get_queryset(self):
         query = self.request.GET.get('q')  # info from form
@@ -254,10 +265,3 @@ class OldMenuListView(ManagerRequiredMixin, ListView):
         }
 
         return context
-
-    def custom500(request, exception):
-        return render(request, '500.html', status=500)
-
-    def custom404(request, exception):
-        return render(request, '404.html', status=404)
-
