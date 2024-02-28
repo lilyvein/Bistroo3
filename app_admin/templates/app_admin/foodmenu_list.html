@@ -1,8 +1,8 @@
 {% extends 'base_admin.html' %}
 {% block main %}
-    <div class="container" style="background-color: white; margin-top: 50px;">
+    <div class="container col-10" style="background-color: white; margin-top: 50px;">
         <div class="row">
-            <div class="col-8 mx-auto">
+            <div class="col-10 mx-auto mt-5">
                 <h1 class="h2 mt-4">Menüüde nimekiri</h1>
                 <table class="table table-bordered table-hover mt-3">
                     <thead>
@@ -37,11 +37,12 @@
                     {% endif %}
                     </tbody>
                 </table>
-                {% include 'pagination.html' %}
+
                 <p class="pt-2">
                     <a href="{% url 'app_admin:foodmenu_create' %}" role="button" class="btn btn-primary w-100">Lisa
                         toit</a>
                 </p>
+            {% include 'pagination.html' %}
             </div>
         </div>
     </div>

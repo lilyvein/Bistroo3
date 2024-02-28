@@ -1,8 +1,8 @@
 {% extends 'base_admin.html' %}
 {% block main %}
-    <div class="container" style="background-color: white; margin-top: 50px;">
+    <div class="container col-8" style="background-color: white; margin-top: 50px;">
         <div class="row">
-            <div class="col-8 mx-auto">
+            <div class="col-8 mx-auto mt-5">
                 <h3>Kategooriad</h3>
                 <table class="table table-bordered table-hoover">
                     <thead>
@@ -26,7 +26,7 @@
                     {% endfor %}
                     </tbody>
                 </table>
-                <a href="{% url 'app_admin:category_create' %}">Lisa uus kategooria</a>
+                <a href="{% url 'app_admin:category_create' %}" role="button" class="btn btn-success mb-5">Lisa uus kategooria</a>
             </div>
         </div>
     </div>

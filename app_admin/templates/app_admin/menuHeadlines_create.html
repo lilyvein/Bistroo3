@@ -1,22 +1,55 @@
 {% extends 'base_admin.html' %}
 
 {% block main %}
-    <p></p>
-    <h4>Lisa uus menüü pealkiri</h4>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit" value="Lisa" class="btn btn-primary">
-    </form>
+    <div class="container col-12" style="background-color: white; margin-top: 50px;">
+        <div class="row">
+            <div class="col-10 mx-auto mt-5">
 
-    <p><a href="{% url 'app_admin:menuHeadlines_list' %}">Pealkirjade list</a></p>
-    <p><a href="{% url 'app_admin:index' %}">Homepage</a></p>
-    <script>
-        $(function () {
-            $("#date").datepicker({
-                  // dateFormat: "yy-mm-dd"
-                dateFormat: "dd.mm.yy"
-            });
-        });
-    </script>
+                <h4>Lisa uus menüü pealkiri</h4>
+                <form method="post">
+                    {% csrf_token %}
+
+                    {% for hidden_field in form.hidden_fields %}
+                        <!-- Kuvage veateated ainult punasel taustal -->
+                        {% if hidden_field.errors %}
+                            <div class="alert alert-danger mt-1">
+                                {{ hidden_field.errors|striptags }}
+                            </div>
+                        {% endif %}
+                        {{ hidden_field }}
+                    {% endfor %}
+
+                    {{ form.non_field_errors }}
+                    {% for field in form %}
+                        <div class="form-group{% if field.errors %} has-error{% endif %}">
+                            {{ field.label_tag }}
+                            {{ field }}
+                            {% if field.errors %}
+                                <!-- Siin kuvatakse veateated punasel taustal -->
+                                <div class="alert alert-danger mt-1">
+                                    {{ field.errors|striptags }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+
+                    <input type="submit" value="Lisa" class="btn btn-primary mt-3">
+                </form>
+
+                <div class="row mb-3 mt-4">
+                    <a href="{% url 'app_admin:menuHeadlines_list' %}">Pealkirjade list</a>
+                    <a href="{% url 'app_admin:index' %}">Homepage</a>
+                </div>
+                <script>
+                    $(function () {
+                        $("#date").datepicker({
+                            // dateFormat: "yy-mm-dd"
+                            dateFormat: "dd.mm.yy"
+                        });
+                    });
+                </script>
+            </div>
+        </div>
+    </div>
+
 {% endblock %}

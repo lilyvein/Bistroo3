@@ -1,36 +1,38 @@
 {% extends 'base_admin.html' %}
 
 {% block main %}
-    <div class="container mt-5 mb-5" style="background-color: white;">
-        <h2>Arhiiv</h2>
-        <div class="container mt-5 mb-5" style="background-color: white;">
-            <div class="row col-12 border border-secondary-subtle">
-                <h4 class="fw-bold">Otsing menüü toitudest</h4>
-                <form action="{% url 'app_admin:history_search' %}" method="get" >
+    <div class="container col-8 mb-5" style="background-color: white; margin-top: 50px;">
+        <div class="row">
+            <div class="col-8 mx-auto mt-5">
+                <h3>Arhiiv</h3>
+                <div class="container mt-3 mb-5" style="background-color: white;">
+                    <div class="row border border-secondary-subtle">
+                        <h5 class="fw-bold mt-2">Otsing menüü toitudest</h5>
+                        <p style="color:#8aa6ce">Sisesta toidu nimi mida soovid leida</p>
+                        <form action="{% url 'app_admin:history_search' %}" method="get">
+                            <label for="q" class="form-label">Toidu nimi:</label>
+                            <input type="text" id="q" name="q" required class="form-control">
+                            <input class="btn btn-primary my-2 mt-3" type="submit" value="Otsi">
+                        </form>
+                    </div>
+                </div>
 
-                    <input type="text" id="q" name="q" required class="form-control">
-                    <input class="btn btn-info my-2 mt-3" type="submit" value="Otsi">
-                </form>
-            </div>
-        </div>
-
-        <div class="container pb-5" style="background-color: white;">
-            <div class="row col-12 border border-secondary-subtle">
-                <h4 class="fw-bold">Vanad menüüd</h4>
-                <form action="{% url 'app_admin:history_menu' %}" method="get" class="mb-2">
-
-                    <select name="date" id="date" class="form-select form-control" required>
-                        <option value="">Vali kuupäev</option>
-                        {% for unique_date in unique_dates %}
-                        <option value="{{ unique_date }}">{{ unique_date }}</option>
-                        {% endfor %}
-                        <!-- Options will be dynamically added by Select2 -->
-                    </select>
-                    <input class="btn btn-info mt-3" type="submit" value="Näita menüüd">
-                </form>
+                <div class="container mb-5" style="background-color: white;">
+                    <div class="row col-12 border border-secondary-subtle">
+                        <h5 class="fw-bold mt-2">Vanad menüüd</h5>
+                        <form action="{% url 'app_admin:history_menu' %}" method="get">
+                            <label for="date" class="form-label">Kuupäev:</label>
+                            <select name="date" id="date" class="form-select form-control" required>
+                                <option value="">Vali kuupäev</option>
+                                {% for unique_date in unique_dates %}
+                                    <option value="{{ unique_date }}">{{ unique_date }}</option>
+                                {% endfor %}
+                            </select>
+                            <input class="btn btn-primary mt-3 mb-2" type="submit" value="Näita menüüd">
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-
-
 {% endblock main %}

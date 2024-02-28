@@ -30,7 +30,7 @@ class MenuHeadlinesForm(forms.ModelForm):
         model = MenuHeadlines
         fields = ['date', 'teema', 'soovitab', 'valmistas']
         widgets = {
-            #'date': django.forms.TextInput(attrs={'type': 'date', 'class': 'form-control'}),
+            # 'date': django.forms.TextInput(attrs={'type': 'date', 'class': 'form-control'}),
             'date': TextInput(attrs={'type': 'text',  'id': 'date', 'class': 'form-control',
                                      'placeholder': 'Kliki kuupäeva valimiseks', 'readonly': 'readonly'}),
 
@@ -82,23 +82,6 @@ class MenuHeadlinesUpdateForm(forms.ModelForm):
         #     self.add_error('teema', 'Teemapäev ja soovitab peavad mõlemad olema täidetud!')
         if (teema is None and soovitab is not None) or (teema is not None and soovitab is None):
             self.add_error('teema', 'Teemapäev ja soovitab peavad mõlemad olema täidetud!')
-
-
-"""
-    def clean(self):
-        cleaned_data = super().clean()
-        soovitab = cleaned_data.get('soovitab')
-        teema = cleaned_data.get('teema')
-
-        if (teema is None or teema == '') and (soovitab is not None and soovitab != ''):
-            self.add_error('teema', 'Teemapäev ja soovitab peavad mõlemad olema !')
-            self.add_error('soovitab', 'Teemapäev ja soovitab peavad mõlemad olema täidetud!')
-        elif (teema is not None and teema != '') and (soovitab is None or soovitab == ''):
-            self.add_error('teema', 'Teemapäev ja soovitab peavad mõlemad olema täidetud!')
-            self.add_error('soovitab', 'Teemapäev ja soovitab peavad mõlemad olema täidetud!')
-
-
-"""
 
 
 class FoodMenuUpdateForm(forms.ModelForm):
@@ -159,33 +142,3 @@ FoodMenuFormset = inlineformset_factory(
     extra=5,
     form=FoodMenuUpdateForm,
     fields=('food', 'full_price', 'half_price', 'show_in_menu',))
-
-"""
-class ToiduNimedCreateForm(forms.ModelForm):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        #self.fields['date'].widget = forms.widgets.DateInput(attrs={'type': 'date', 'class': 'form-control mb-2'})
-        self.fields['date'].label = 'Kuupäev'
-        self.fields['category_ID'].label = 'Kategooria'
-        self.fields['food_name'].label = 'Toidu nimi'
-        self.fields['full_price'].label = 'Täis hind'
-        self.fields['half_price'].label = 'Pool hinda'
-        self.fields['show_menu'].label = 'Näitab menüüs'
-
-    class Meta:
-        model = ToiduNimed
-        fields = ('date', 'category_ID', 'food_name', 'full_price','half_price', 'show_menu')
-        widgets = {
-            'date': django.forms.TextInput(attrs={'type': 'date', 'class': 'form-control'}),
-            'category_ID': django.forms.Select(attrs={'type': 'category_ID', 'class': 'form-control'}),
-            'food_name': django.forms.TextInput(attrs={'type': 'text', 'class': 'form-control'}),
-            'full_price': django.forms.TextInput(attrs={'type': 'number', 'class': 'form-control'}),
-            'half_price': django.forms.TextInput(attrs={'type': 'number', 'class': 'form-control'}),
-            'show_menu': django.forms.CheckboxInput(attrs={'class': 'form-control form-check-input'}),
-        }
-
-
-class CategoryCreateForm:
-    pass
-
-"""
