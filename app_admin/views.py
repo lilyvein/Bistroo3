@@ -11,7 +11,9 @@ from django.contrib import messages
 from django.urls import reverse
 from django.views.generic.detail import SingleObjectMixin
 from django.http import HttpResponseRedirect, Http404
-import datetime
+from datetime import date
+from django.utils import timezone
+
 
 from .forms import *
 from .models import *
@@ -141,6 +143,11 @@ class FoodMenuListView(ManagerRequiredMixin, ListView):
     template_name = 'app_admin/foodmenu_list.html'
     paginate_by = 10
 
+    def get_context_data(self, **kwargs):
+        context = super(FoodMenuListView, self).get_context_data(**kwargs)
+        context['today'] = timezone.localdate()
+        return context
+
 
 class FoodMenuUpdateView(ManagerRequiredMixin, SingleObjectMixin, FormView):
     model = FoodMenu
@@ -165,7 +172,7 @@ class FoodMenuUpdateView(ManagerRequiredMixin, SingleObjectMixin, FormView):
         messages.add_message(
             self.request,
             messages.SUCCESS,
-            'Changes were saved.'
+            'Muudatused on salvestatud.'
         )
 
         return HttpResponseRedirect(self.get_success_url())

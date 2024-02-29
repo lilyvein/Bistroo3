@@ -17,8 +17,7 @@
                     <tbody>
                     {% for menuHeadline in menuHeadlines %}
                         <tr>
-                            {#                        <td>{{ menuHeadline.date|date:"d.m.Y" }}</td>#}
-                            <td>{{ menuHeadline.date }}</td>
+                            <td>{{ menuHeadline.date|date:"d.m.Y" }}</td>
                             <td>{% if menuHeadline.teema %}{{ menuHeadline.teema }} {% endif %}</td>
                             <td>{% if menuHeadline.soovitab %}{{ menuHeadline.soovitab }} {% endif %}</td>
                             <td>{% if menuHeadline.valmistas %}{{ menuHeadline.valmistas }} {% endif %}</td>

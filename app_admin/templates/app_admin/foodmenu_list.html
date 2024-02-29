@@ -1,49 +1,44 @@
 {% extends 'base_admin.html' %}
+
 {% block main %}
-    <div class="container col-10" style="background-color: white; margin-top: 50px;">
-        <div class="row">
-            <div class="col-10 mx-auto mt-5">
-                <h1 class="h2 mt-4">Menüüde nimekiri</h1>
-                <table class="table table-bordered table-hover mt-3">
-                    <thead>
+<div class="container col-10" style="background-color: white; margin-top: 50px;">
+    <div class="row">
+        <div class="col-10 mx-auto mt-5">
+            <h1 class="h2 mt-4">Menüüde nimekiri</h1>
+            <table class="table table-bordered table-hover mt-3">
+                <thead>
                     <tr class="text-center">
                         <th>Menüü</th>
                         <th>Tegevus</th>
                     </tr>
-                    </thead>
-                    <tbody>
-
+                </thead>
+                <tbody>
                     {% if object_list %}
+                        <p>Täna: {{ today }}</p>
                         {% for menu in object_list %}
-                            <tr>
-                                <td class="text-reset"
-                                    href="{{ menu.get_absolute_url }}">{{ menu.date }} {{ menu.category }}
-                                </td>
-                                <td class="text-center">
-                                    {% if menu.date >= today %}
-                                        <a href="{% url 'app_admin:foodmenu_update' pk=menu.id %}">Muuda</a>
-                                        <a href="{% url 'app_admin:foodmenu_detail' pk=menu.id %}"
-                                           class="text-warning">Vaata</a>
-                                        <a href="{% url 'app_admin:foodmenu_delete' pk=menu.id %}"
-                                           class="text-danger">Kustusta</a>
-                                    {% else %}
-                                        <span class="text-secondary">Muutmine/Kustutamine keelatud</span>
-                                    {% endif %}
-                                </td>
-                            </tr>
+                        <tr>
+                            <td>{{ menu.date }} {{ menu.category }}</td>
+                            <td class="text-center">
+                                <a href="{% url 'app_admin:foodmenu_detail' pk=menu.id %}" class="text-warning">Vaata</a>
+                                {% if menu.date >= today %}
+                                    <a href="{% url 'app_admin:foodmenu_update' pk=menu.id %}" class="text-primary">Muuda</a>
+                                    <a href="{% url 'app_admin:foodmenu_delete' pk=menu.id %}" class="text-danger">Kustuta</a>
+                                {% else %}
+                                    <span class="text-secondary">Muutmine/Kustutamine keelatud</span>
+                                {% endif %}
+                            </td>
+                        </tr>
                         {% endfor %}
                     {% else %}
                         <p>Siin ei ole menüüsid mida näidata.</p>
                     {% endif %}
-                    </tbody>
-                </table>
-
-                <p class="pt-2">
-                    <a href="{% url 'app_admin:foodmenu_create' %}" role="button" class="btn btn-primary w-100">Lisa
-                        toit</a>
-                </p>
+                </tbody>
+            </table>
+            <p class="pt-2">
+                <a href="{% url 'app_admin:foodmenu_create' %}" role="button" class="btn btn-primary w-100">Lisa toit</a>
+            </p>
             {% include 'pagination.html' %}
-            </div>
         </div>
     </div>
+</div>
 {% endblock main %}
