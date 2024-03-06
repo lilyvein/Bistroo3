@@ -41,7 +41,7 @@ class CategoryCreateView(ManagerRequiredMixin, CreateView):
     model = Category
     success_url = reverse_lazy('app_admin:category_list')
     form_class = CategoryUpdateForm
-    #fields = '__all__'
+    # fields = '__all__'
 
 
 class CategoryUpdateView(ManagerRequiredMixin, UpdateView):
@@ -56,7 +56,7 @@ class CategoryDeleteView(ManagerRequiredMixin, DeleteView):
     template_name = 'app_admin/category_delete.html'
     model = Category
     success_url = reverse_lazy('app_admin:category_list')
-    form_class = CategoryUpdateForm
+
 
 
 class MenuHeadlinesView(ManagerRequiredMixin, CreateView):
@@ -68,8 +68,8 @@ class MenuHeadlinesView(ManagerRequiredMixin, CreateView):
 class MenuHeadlinesListView(ManagerRequiredMixin, ListView):
     template_name = 'app_admin/menuHeadlines_list.html'
     model = MenuHeadlines
-    #queryset = MenuHeadlines.objects.order_by('-date')  # Result ordered by kuupäev
-    #queryset = MenuHeadlines.objects.all()  # Result ordered mis on juba modeliga sorteeritud ja
+    # queryset = MenuHeadlines.objects.order_by('-date')  # Result ordered by kuupäev
+    # queryset = MenuHeadlines.objects.all()  # Result ordered mis on juba modeliga sorteeritud ja
     # sellepärast pole meil nedi ridu vaja
 
     context_object_name = 'menuHeadlines'  # see tuleb viewst
@@ -132,10 +132,15 @@ class FoodMenuCreateView(ManagerRequiredMixin, CreateView):
         messages.add_message(
             self.request,
             messages.SUCCESS,
-            'The menu has been added'
+            'Menüü on lisatud'
         )
 
         return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['test'] = 'Proov'
+        return context
 
 
 class FoodMenuListView(ManagerRequiredMixin, ListView):
@@ -145,7 +150,7 @@ class FoodMenuListView(ManagerRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super(FoodMenuListView, self).get_context_data(**kwargs)
-        context['today'] = timezone.localdate()
+        # context['today'] = timezone.localdate()
         return context
 
 
