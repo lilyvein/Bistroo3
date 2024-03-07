@@ -1,9 +1,14 @@
 {% extends 'base_admin.html' %}
 {% block main %}
-    <div class="container col-8 mt-5 mb-5  bg-body-tertiary rounded shadow">
+    <div class="container col-12 mt-5 mb-5  bg-body-tertiary rounded shadow">
         <div class="row">
             <div class="col-8 mx-auto mt-5">
                 <h3>Kategooriad</h3>
+                <div class="alert alert-info">
+                    <span class="pb-0">Kategooriad peavad olema just selles järjekorras nagu siin on.
+                        Kui soovid uut kategooriat lisada olemasolevate kategooriate vahele, siis sisesta number, mis
+                        ääb kahe kategooria numbri vahele, näiteks 15, 25, 35 jne.</span>
+                </div>
 
                 {% if messages %}
                     <div class="messages">
@@ -28,10 +33,12 @@
                             <td>{{ category.number }}</td>
                             <td>{{ category.name }}</td>
                             <td class="text-center">
-                                <a href="{% url 'app_admin:category_update' pk=category.id %}">Muuda</a>
-                                <a href="{% url 'app_admin:category_delete' pk=category.id %}"
-                                   class="text-danger">Kustuta</a>
+                                <a href="{% url 'app_admin:category_update' pk=category.id %}" class="text-primary">
+                                    <i class="far fa-edit" style="color: #0000ff; margin-right: 10px;" title="Muuda"></i></a>
+                                <a href="{% url 'app_admin:category_delete' pk=category.id %}" class="text-danger">
+                                    <i class="fas fa-trash-alt" style="color: #ff0800;" title="Kustuta"></i></a>
                             </td>
+
                         </tr>
                     {% endfor %}
                     </tbody>

@@ -1,24 +1,28 @@
 {% extends 'base_admin.html' %}
 
 {% block main %}
-    <div class="container col-8 mb-5" style="background-color: white; margin-top: 50px;">
+    <div class="container col-12 mt-5 mb-5  bg-body-tertiary rounded shadow">
         <div class="row">
             <div class="col-8 mx-auto mt-5">
                 <h3>Arhiiv</h3>
-                <div class="container mt-3 mb-5" style="background-color: white;">
-                    <div class="row border border-secondary-subtle">
+                <div class="alert alert-info" role="alert">
+                    <span>Siin saad näha ajalugu toitude ja menüüde kohta.</span>
+                </div>
+                <div class="container mt-3 mb-5 bg-white">
+                    <div class="row border border-secondary-subtle shadow">
                         <h5 class="fw-bold mt-2">Otsing menüü toitudest</h5>
-                        <p style="color:#8aa6ce">Sisesta toidu nimi mida soovid leida</p>
+
+                        <p style="color:#d9951a">Sisesta toidu nimi mida soovid leida</p>
                         <form action="{% url 'app_admin:history_search' %}" method="get">
                             <label for="q" class="form-label">Toidu nimi:</label>
-                            <input type="text" id="q" name="q" required class="form-control">
+                            <input type="text" id="q" name="q" required class="form-control" placeholder="Toidu nimi">
                             <input class="btn btn-primary my-2 mt-3" type="submit" value="Otsi">
                         </form>
                     </div>
                 </div>
 
-                <div class="container mb-5" style="background-color: white;">
-                    <div class="row col-12 border border-secondary-subtle">
+                <div class="container mb-5 bg-white">
+                    <div class="row border border-secondary-subtle shadow">
                         <h5 class="fw-bold mt-2">Vanad menüüd</h5>
                         <form action="{% url 'app_admin:history_menu' %}" method="get">
                             <label for="date" class="form-label">Kuupäev:</label>

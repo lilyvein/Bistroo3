@@ -1,12 +1,18 @@
 {% extends 'base_admin.html' %}
 {% block main %}
-    <div class="container col-10" style="background-color: white; margin-top: 50px;">
+    <div class="container col-12 mt-5 mb-5  bg-body-tertiary rounded shadow">
         <div class="row">
-            <div class="col-10 mx-auto mt-5">
+            <div class="col-8 mx-auto mt-5 mb-5">
                 <h2>Otsingu tulemused</h2>
+                <div class="alert alert-info mt-2" role="alert">
+                    <ul>
+                        <li>Siin kuvatakse kõik kuupäevad mil otsitud toit oli menüüs.</li>
+                        <li> Kui vajutad kuupäeva lingile näed kogu menüüd.</li>
+                    </ul>
+                </div>
                 {% if object_list %}
 
-                    <table class="table table-bordered table-hover">
+                    <table class="table table-bordered table-hover shadow">
                         <thead>
                         <tr class="text-center">
                             <th class="col-1">Kuupäev</th>
@@ -36,6 +42,9 @@
                 {% endif %}
             </div>
         </div>
+        {% if page_obj.paginator.num_pages > 1 %}
+            {% include 'pagination.html' %}
+        {% endif %}
     </div>
 
 {% endblock main %}

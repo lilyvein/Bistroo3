@@ -11,14 +11,14 @@
                         <span class="pb-0">Kui soovid uut kategooriat lisada olemasolevate kategooriate vahele, siis sisesta number, mis jääb kahe kategooria numbri vahele, näiteks 15, 25, 35 jne.</span>
                     </div>
                 </div>
-                <form method="post" class="mt-3">
+                <form method="post" class="mt-4">
                     {% csrf_token %}
-                    {{ form.as_p }}
+                    <strong>{{ form.as_p }}</strong>
                     <input type="submit" value="Lisa kategooria" class="btn btn-primary">
                 </form>
 
                 <p><a href="{% url 'app_admin:category_list' %}" class="d-block mt-3">Kategooriate nimekiri</a></p>
-                <p><a href="{% url 'app_admin:index' %}" class="d-block">Avalehele</a></p>
+                <p><a href="{% url 'app_admin:menuHeadlines_list' %}" class="d-block">Avalehele</a></p>
             </div>
         </div>
     </div>

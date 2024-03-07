@@ -2,11 +2,21 @@
 {% load is_menu_old %}
 
 {% block main %}
-    <div class="container col-8 mt-5 mb-5  bg-body-tertiary rounded shadow">
+    <div class="container mt-5 mb-5  bg-body-tertiary rounded shadow">
         <div class="row">
-            <div class="col-10 mx-auto mt-2">
-                <h1 class="h2 mt-4">Menüüde nimekiri</h1>
-                <table class="table table-bordered table-hover mt-3">
+            <div class="col-10 mx-auto mt-5">
+                <h3>Menüü toidud</h3>
+                <div class="alert alert-info" role="alert">
+                    <ul>
+                        <li>Siin nimekirjas on toidud mis on sisestatud.</li>
+                        <li>Uuema kuupäevaga toidud kuvatakse ennem.</li>
+                        <li>Muuta ja kustutada saab tänase ja tuleviku kuupäevaga toitusid, mineviku saab ainult
+                            vaadata.</li>
+                        <li>Üksikut toitu kategooriast kustutada ei saa.
+                            Muutmisel tuleb teha toidu valikukasti Delete linnuke</li>
+                    </ul>
+                </div>
+                <table class="table table-bordered table-hover shadow mt-3">
                     <thead>
                     <tr class="text-center">
                         <th>Menüü</th>
@@ -14,39 +24,41 @@
                     </tr>
                     </thead>
                     <tbody>
-
                     {% if object_list %}
                         {% now "d.m.Y" as today %}
                         {% for menu in object_list %}
                             <tr>
                                 <td>{{ menu.date }} {{ menu.category }}</td>
                                 <td class="text-center">
-                                    {% if  not menu.date|striptags|is_menu_old %}
-
-                                        <a href="{% url 'app_admin:foodmenu_update' pk=menu.id %}" class="text-primary">Muuda</a>
-                                        <a href="{% url 'app_admin:foodmenu_delete' pk=menu.id %}" class="text-danger">Kustuta</a>
+                                    <a href="{% url 'app_admin:foodmenu_detail' pk=menu.id %}" class="text-warning">
+                                        <i class="fa-solid fa-eye" style="color: #0000ff;" title="Vaata"></i>
+                                    </a>
+                                    {% if not menu.date|striptags|is_menu_old %}
+                                        <a href="{% url 'app_admin:foodmenu_update' pk=menu.id %}" class="text-primary"
+                                           style="margin-left: 10px; margin-right: 10px;">
+                                            <i class="far fa-edit" style="color: #0000ff;" title="Muuda"></i>
+                                        </a>
+                                        <a href="{% url 'app_admin:foodmenu_delete' pk=menu.id %}" class="text-danger">
+                                            <i class="fas fa-trash-alt" style="color: #ff0800;" title="Kustuta"></i>
+                                        </a>
                                     {% endif %}
-                                    <a href="{% url 'app_admin:foodmenu_detail' pk=menu.id %}" class="text-warning">Vaata</a>
-
                                 </td>
                             </tr>
                         {% endfor %}
                     {% else %}
-
                         <tr>
                             <td colspan="2">Siin ei ole menüüsid mida näidata.</td>
                         </tr>
                     {% endif %}
-
                     </tbody>
                 </table>
-                <p class="pt-2">
+                <p class="pt-2 mb-5">
                     <a href="{% url 'app_admin:foodmenu_create' %}" role="button" class="btn btn-primary w-100">Lisa
                         toit</a>
                 </p>
-            {% if page_obj.paginator.num_pages > 1 %}
-                {% include 'pagination.html' %}
-            {% endif %}
+                {% if page_obj.paginator.num_pages > 1 %}
+                    {% include 'pagination.html' %}
+                {% endif %}
             </div>
         </div>
     </div>

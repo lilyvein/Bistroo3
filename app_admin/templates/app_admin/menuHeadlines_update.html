@@ -1,12 +1,20 @@
 {% extends 'base_admin.html' %}
 {% block main %}
     <br>
-    <div class="container" style="background-color: white;">
+    <div class="container col-10 mt-5 mb-5  bg-body-tertiary rounded shadow">
         <div class="row">
             <div class="col-8 mx-auto mt-2">
                 <p></p>
-                <h3>Uuenda pealkirjasid <span class="fw-bold">{{ menuHeadlines }}</span></h3>
-                <form method="post" class="form">
+                <h3>Uuenda menüü pealkirjasid <span class="fw-bold">{{ menuHeadlines }}</span></h3>
+                <div class="alert alert-info" role="alert">
+                    <ul>
+                        <li>Siin saad menüü pealkirjal muuta kõiki väljasid.</li>
+                        <li>Täidetud peab olema vähemalt kuupäev.</li>
+                        <li>Kui täidad päevateema siis peab olema täidetud ka peakokk ning vastupidi.</li>
+                        <li>Soovitab väli on vabatahtlik täita.</li>
+                    </ul>
+                </div>
+                <form method="post" class="form mb-5">
                     {% for hidden_field in form.hidden_fields %}
                         <!-- Kuvage veateated ainult punasel taustal -->
                         {% if hidden_field.errors %}
@@ -16,11 +24,10 @@
                         {% endif %}
                         {{ hidden_field }}
                     {% endfor %}
-
                     {% csrf_token %}
                     {{ form.non_from_errors }}
                     {% for field in form %}
-                        <div class="form-field">
+                        <div class="form-field mt-3">
                             <label for="{{ field.auto_id }}" class="fw-bold">{{ field.label_tag }}</label>
                             {{ field }}
                             {% if field.errors %}
@@ -31,11 +38,8 @@
                             {% endif %}
                         </div>
                     {% endfor %}
-
-                    <br>
-                    <input type="submit" value="Uuenda " class="btn btn-success mt-2">
+                    <input type="submit" value="Uuenda " class="btn btn-success mt-4">
                 </form>
-                <br>
             </div>
         </div>
     </div>

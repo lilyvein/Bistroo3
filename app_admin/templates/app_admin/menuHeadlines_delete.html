@@ -1,21 +1,25 @@
 {% extends 'base_admin.html' %}
 
 {% block main %}
-<br>
-<div class="container" style="background-color: white;">
-    <br>
-    <h3 style="color:red;">Kas kustutan selle pealkirja?</h3>
-    <p>
-    <h5>{{ menuheadlines.date|date:"d.m.Y" }} {{ menuheadlines.teema }}</h5>
-    </p>
-    <br>
-    <form method="post">
-        {% csrf_token %}
-        <input type="submit" value="Kustuta" class="btn btn-danger">
-    </form>
-<p></p>
-    <p><a href="{% url 'app_admin:menuHeadlines_list' %}">Menüü pealkirjade nimekiri</a></p>
-    <br>
+    <div class="container col-10 mt-5 mb-5  bg-body-tertiary rounded shadow">
+        <div class="row">
+            <div class="col-12 mx-auto mt-3">
+                <h2>Menüü pealkirja kustutamine</h2>
+                <div class="alert alert-danger mt-2" role="alert">
+                    <span>Kui kustutad ära selle pealkirja siis kustuvad ka kõik toidud selles menüüs!</span>
+                </div>
+                <div class="container col-11 bg-body-tertiary rounded shadow">
 
-</div>
+                    <h4 class="pt-4">Kas kustutan selle pealkirja?</h4>
+                     <h5 style="color: red;">"{{ menuheadlines.date }} {{ menuheadlines.teema }}"</h5>
+                    <form method="post">
+                        {% csrf_token %}
+                        <input type="submit" value="Kustuta" class="btn btn-danger mt-4 mb-3">
+                    </form>
+
+                    <p class="pb-5"><a href="{% url 'app_admin:menuHeadlines_list' %}">Mine tagasi menüü pealkirjade nimekirja</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}

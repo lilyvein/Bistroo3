@@ -1,11 +1,10 @@
 {% extends 'base_admin.html' %}
 {% block main %}
-    <div class="container col-8" style="background-color: white; margin-top: 50px;">
+    <div class="container col-12 mt-5 mb-5  bg-body-tertiary rounded shadow">
         <div class="row">
             <div class="col-5 mx-auto mt-5">
-
                 <h2>Menüü {{ estonian_date }} </h2>
-            <p><a href="{% url 'app_admin:history_list' %}">Mine arhiivi tagasi</a></p>
+                <p><a href="{% url 'app_admin:history_list' %}">Mine arhiivi tagasi</a></p>
                 {% if object_list %}
                     {% regroup object_list by menu__category__name as result %}
                     <ul>

@@ -1,11 +1,20 @@
 {% extends 'base_admin.html' %}
 {% load is_menu_old %}  <!-- Eeldame, et teil on 'is_menu_old' filter korrektselt defineeritud -->
 {% block main %}
-    <div class="container col-10" style="background-color: white; margin-top: 50px;">
+   <div class="container mt-5 mb-5  bg-body-tertiary rounded shadow" >
         <div class="row">
             <div class="col-10 mx-auto mt-5">
                 <h3>Teemade pealkirjad</h3>
-                <table class="table table-bordered table-hover">
+                <div class="alert alert-info" role="alert">
+                    <ul>
+                        <li>Siin on nimekiri menüüdest mis on sisestatud.</li>
+                        <li>Menüüd mis on tänase või tuleviku kuupäevaga saab muuta ja kustutada.</li>
+                        <li>Menüüd mis on minevikus muuta ei saa aga kustutada saab ning siis kustuvad kõik selle päeva
+                            toidud ka!
+                        </li>
+                    </ul>
+                </div>
+                <table class="table table-bordered table-hover shadow">
                     <!-- Muutsin 'table-hoover' õigeks klassiks 'table-hover' -->
                     <thead>
                     <tr class="text-center">
@@ -19,21 +28,24 @@
                     <tbody>
                     {% for menuHeadline in menuHeadlines %}
                         <tr>
-                            <td>{{ menuHeadline.date|date:"d.m.Y" }}</td>
-                            <td>{{ menuHeadline.teema }}</td>
-                            <td>{{ menuHeadline.soovitab }}</td>
-                            <td>{{ menuHeadline.valmistas }}</td>
-                            <td class="text-center">
-                                {% if not menuHeadline.date|date:"d.m.Y"|is_menu_old %}
-                                    <a href="{% url 'app_admin:menuHeadlines_update' pk=menuHeadline.id %}"
-                                       class="text-primary">Uuenda</a>
-                                {% else %}
-                                    Seda menüüd ei saa muuta.
-                                {% endif %}
-                                <a href="{% url 'app_admin:menuHeadlines_delete' pk=menuHeadline.id %}"
-                                   class="text-danger">Kustuta</a>
-                            </td>
-                        </tr>
+                        <td>{{ menuHeadline.date|date:"d.m.Y" }}</td>
+                        <td>{{ menuHeadline.teema }}</td>
+                        <td>{{ menuHeadline.soovitab }}</td>
+                        <td>{{ menuHeadline.valmistas }}</td>
+                        <td class="text-center">
+                            {% if not menuHeadline.date|date:"d.m.Y"|is_menu_old %}
+                                <a href="{% url 'app_admin:menuHeadlines_update' pk=menuHeadline.id %}"
+                                   class="text-primary" style="margin-right: 10px;">
+                                     <i class="far fa-edit" style="color: #0000ff;" title="Muuda"></i>
+                                </a>
+                            {% else %}
+                                <i class="fas fa-exclamation-circle" style="color: #800040; margin-right: 10px;"></i>
+                            {% endif %}
+                            <a href="{% url 'app_admin:menuHeadlines_delete' pk=menuHeadline.id %}" class="text-danger">
+                                <i class="fas fa-trash-alt" style="color: #ff0800;" title="Kustuta"></i>
+                            </a>
+                        </td>
+
                     {% endfor %}
                     </tbody>
                 </table>

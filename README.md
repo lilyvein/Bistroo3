@@ -23,8 +23,11 @@ lihtne ja loogiline. Samas mingi asja tegemiseks ei tohiks üle paari kliki teha
 rakenduses kasutatakse ka Bootstrap stiile, et asi paistaks ilusam välja. App_admin puhul on
 kujundus vaba, kuid ärge kirjuks asja ajage. Tekst peab olema lihtsalt loetav. Vajadusel võib
 kasutada veel Font Awesome ikoonikesi. Kasutajaliides (UI) on kõikjal eestikeelne
-kokkuleppel inglise keelne. Esimene asi mida tuleb hakata looma on kategooriad.
-Kategooriad (Model Category)
+kokkuleppel inglise keelne. 
+
+Esimene asi mida tuleb hakata looma on kategooriad.
+
+## Kategooriad (Model Category)
 
 Kategooriad on olulised, sest iga toidunimi käib kindlasse kategooriasse ja neid näidatakse
 õiges kategooriate järjekorras vaata ekraanitõmmis 2. Kategooriad peavad olema just selles
@@ -79,6 +82,7 @@ toidud kaovad tehtud päeva menüüdest. Mõlemad on seotud mudeli tegemisel ole
 on_delete=models.CASCADE valikuga. Siin võib eksperimenteerida ka muude valikutega,
 kuid siis tuleb ka mingi muu lahendus välja mõelda. Menüüd ei tohi veidralt õhku jääda kui
 mingi seos on puudu/kustutatud.
+
 # Mudelid loodud
 
 Nüüd kui on mudelid loodud ja tundub, et asjad toimivad nagu vaja (CRUD), tuleb hakata
@@ -101,6 +105,7 @@ muutuks, kui midagi lisatakse või muudetakse.
 Kui avalik vaade on ka toimima saadud, siis on vaja teha veel rakendusse app_admin otsing.
 Siin on mõeldud kindla kuupäeva menüüd ning otsing fraasi põhiselt.
 5
+
 ## Otsing - kuupäev
 
 Siin võiks olla olemasolevate kuupäevade nimekiri (Combobox) kust saab valida sobiva
@@ -108,6 +113,7 @@ kuupäeva ning näidatakse selle päeva menüü. Siin midagi erilist tekitama ei
 kategooriate kaupa nii nagu avalik vaade aga disain on lihtsustatud. Siin ei pea olema disain
 nagu avalikul vaatel. Selle päeva info peab lihtsalt näha olema. Sealhulgas pealkirjad, kui need
 on olemas.
+
 ## Otsing - fraas
 
 Siin on otsing sisestatud fraasi põhjal. Miinimum pikkus otsitaval fraasil on 3 või 4 tähte.
@@ -125,10 +131,12 @@ Päris admin leht (/admin) on arendajale ja sinna ei peaks peale arendaja keegi 
 Kasutajatel on kombeks aadressi real „mängida“, seega on vaja kirjutada ka vigade lehed (error
 pages) 404 ja 500. Neid lehti on näha alles siis, kui seadetes (settings.py) on DEBUG=False
 kirjutatud.
+
 Lisaks on soovitav lugeda Difference Between Development, Stage, And Production
-https://dev.to/flippedcoding/difference-between-development-stage-and-production-d0p Kõik
-selleks, et millised peaks olema veebilehe seaded LIVE variandis (production). Siiani olete
+https://dev.to/flippedcoding/difference-between-development-stage-and-production-d0p 
+Kõik selleks, et millised peaks olema veebilehe seaded LIVE variandis (production). Siiani olete
 toimetanud arendus variandis (development).
+
 ### Ekraanitõmmised
 
 Dokumendi lõpus on veel terve rida ekraanitõmmiseid mida pole viidatud tekstis, kuid need on

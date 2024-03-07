@@ -4,11 +4,20 @@
     <body>
 
 
-    <div class="container" style="background-color: white;">
+    <div class="container mt-5 mb-5 bg-body-tertiary rounded shadow">
         <div class="row">
 
             <div class="col-12 mx-auto mt-2">
-                <p></p>
+            <h3>Toitude lisamine menüüsse</h3>
+                <div class="alert alert-info" role="alert">
+                    <ul>
+                        <li>Kui paned linnukese näita menüüs siis see toit kuvatakse menüüs, kui võtad linnukese ära siis hägustatakse see rida.</li>
+                        <li>Linnuke kustuta kastis kustutab toidu menüüst</li>
+
+                        <li>Toidunimi ja täis hind peavad olema täidetu.</li>
+                        <li>Kui paned toidu hinnaks 0 siis kuvatakse et, antud toit on prae hinna sees</li>
+                    </ul>
+                </div>
                 <form action="" method="post" enctype="multipart/form-data" class="form">
                     {% for hidden_field in form.hidden_fields %}
                         <div class="col-12">
@@ -50,7 +59,8 @@
                     <div class="col-8">
                         <button type="submit" value="Update collection" class="btn btn-primary w-100 mb-3">Uuenda menüüd
                         </button>
-                       <a href="{% url 'app_admin:foodmenu_list' %}" role="button" class="btn btn-secondary w-100">Toitude nimekirja</a>
+                        <a href="{% url 'app_admin:foodmenu_list' %}" role="button" class="btn btn-secondary w-100">Toitude
+                            nimekirja</a>
                     </div>
                 </form>
                 <br>

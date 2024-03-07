@@ -2,38 +2,44 @@
 {% load is_menu_old %}
 
 {% block main %}
-<br>
-<div class="container" style="background-color: white;">
-    {% if messages %}
-        <ul class="messages">
-            {% for message in messages %}
-                <li>{{ message }}</li>
-            {% endfor %}
-        </ul>
-    {% endif %}
     <br>
-    <h3>Menüü detailid: {{ foodmenu }}</h3>
-    <hr>
+    <div class="container col-12 mt-5 mb-5  bg-body-tertiary rounded shadow">
+        <div class="row">
+            <div class="col-8 mx-auto mt-5">
+                {% if messages %}
+                    <ul class="messages">
+                        {% for message in messages %}
+                            <li>{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+                <br>
+                <h3>Menüü detailid: {{ foodmenu }}</h3>
+                <hr>
 
-    {% for food in foodmenu.food_fooditem.all %}
-        <div>Toit: {{ food.food }}</div>
-        <div>Hind: {{ food.full_price }}</div>
-        <div>Poolik hind: {{ food.half_price }}</div>
-        <div>Näitab menüüs: {{ food.chow_in_menu }}</div>
-        <hr>
-    {% endfor %}
+                {% for food in foodmenu.food_fooditem.all %}
+                    <div>Toit: {{ food.food }}</div>
+                    <div>Hind: {{ food.full_price }}</div>
+                    <div>Poolik hind: {{ food.half_price }}</div>
+                    <div>Näitab menüüs: {{ food.chow_in_menu }}</div>
+                    <hr>
+                {% endfor %}
 
-</div>
-<p>
-    {% if  not foodmenu.date|striptags|is_menu_old %}
-        <a href="{% url 'app_admin:foodmenu_update' pk=foodmenu.id %}" role="button"
-           class="btn btn-primary w-100 mb-2">Muuda menüüd</a>
+            </div>
+        <div class="col-8 mx-auto mb-5">
+                {% if  not foodmenu.date|striptags|is_menu_old %}
+                    <a href="{% url 'app_admin:foodmenu_update' pk=foodmenu.id %}" role="button"
+                       class="btn btn-primary w-100 mb-2">Muuda menüüd</a>
 
-    {% else %}
-    <tr>
-        <td colspan="2">Seda menüüd ei saa muuta.</td>
-    </tr>
-    {% endif %}
-    <a href="{% url 'app_admin:foodmenu_list' %}" role="button" class="btn btn-secondary w-100">Toitude nimekirja</a>
-</p>
+                {% else %}
+                    <tr>
+                        <td colspan="2">Seda menüüd ei saa muuta.</td>
+                    </tr>
+                {% endif %}
+                <a href="{% url 'app_admin:foodmenu_list' %}" role="button" class="btn btn-secondary w-100">Toitude
+                    nimekirja</a>
+            </div>
+        </div>
+    </div>
+    </div>
 {% endblock main %}

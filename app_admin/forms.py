@@ -11,6 +11,7 @@ class CategoryUpdateForm(forms.ModelForm):
         super(CategoryUpdateForm, self).__init__(*args, **kwargs)
         self.fields['number'].label = 'Kategooria ID' # vorm eesti keelseks
         self.fields['name'].label = 'Kategooria nimi'
+
     class Meta:
         model = Category
         fields = ['number', 'name']
@@ -18,7 +19,6 @@ class CategoryUpdateForm(forms.ModelForm):
             'number': forms.TextInput(attrs={'type': 'text', 'class': 'form-control mb-2', 'placeholder': 'Sisesta kategooria number'}),
             'name': forms.TextInput(attrs={'type': 'text', 'class': 'form-control', 'placeholder':'Sisesta kategooria nimi' }),
         }
-
 
 
 class MenuHeadlinesForm(forms.ModelForm):
@@ -39,9 +39,9 @@ class MenuHeadlinesForm(forms.ModelForm):
             'date': django.forms.DateInput(attrs={'type': 'text',  'id': 'date', 'class': 'form-control',
                                      'placeholder': 'Kliki kuupäeva valimiseks', 'readonly': 'readonly'}, format='%d.%m.%Y'),
 
-            'teema': django.forms.TextInput(attrs={'type': 'text', 'class': 'form-control'}),
-            'soovitab': django.forms.TextInput(attrs={'type': 'text', 'class': 'form-control'}),
-            'valmistas': django.forms.TextInput(attrs={'type': 'text', 'class': 'form-control'}),
+            'teema': django.forms.TextInput(attrs={'type': 'text', 'class': 'form-control', 'placeholder': 'Kirjuta päeva teema. '}),
+            'soovitab': django.forms.TextInput(attrs={'type': 'text', 'class': 'form-control', 'placeholder': 'Kirjuta kes soovitab.'}),
+            'valmistas': django.forms.TextInput(attrs={'type': 'text', 'class': 'form-control', 'placeholder': 'Kirjuta kes valmistas.'}),
 
         }
 

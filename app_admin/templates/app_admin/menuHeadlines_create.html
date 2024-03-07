@@ -1,14 +1,20 @@
 {% extends 'base_admin.html' %}
 
 {% block main %}
-    <div class="container col-12" style="background-color: white; margin-top: 50px;">
+    <div class="container col-12 mt-5 mb-5  bg-body-tertiary rounded shadow">
         <div class="row">
             <div class="col-10 mx-auto mt-5">
 
-                <h4>Lisa uus menüü pealkiri</h4>
+                <h3>Lisa uus menüü pealkiri</h3>
+                <div class="alert alert-info" role="alert">
+                    <ul>
+                        <li>Pealkirja lisamiseks peab minimaalselt olema valitud kuupäev, muud väljad on valikulised.</li>
+                        <li>Kui täidad ära päevateema siis pead täitma ka peakoka välja ja vastupidi.</li>
+                        <li>Kes valmistas ei ole kohustus täita.</li>
+                    </ul>
+                </div>
                 <form method="post">
                     {% csrf_token %}
-
                     {% for hidden_field in form.hidden_fields %}
                         <!-- Kuvage veateated ainult punasel taustal -->
                         {% if hidden_field.errors %}
@@ -18,11 +24,10 @@
                         {% endif %}
                         {{ hidden_field }}
                     {% endfor %}
-
                     {{ form.non_field_errors }}
                     {% for field in form %}
-                        <div class="form-group{% if field.errors %} has-error{% endif %}">
-                            {{ field.label_tag }}
+                        <div class="form-group mb-4{% if field.errors %} has-error{% endif %}">
+                            <strong>{{ field.label_tag }}</strong>
                             {{ field }}
                             {% if field.errors %}
                                 <!-- Siin kuvatakse veateated punasel taustal -->
@@ -32,13 +37,11 @@
                             {% endif %}
                         </div>
                     {% endfor %}
-
                     <input type="submit" value="Lisa" class="btn btn-primary mt-3">
                 </form>
-
                 <div class="row mb-3 mt-4">
-                    <a href="{% url 'app_admin:menuHeadlines_list' %}">Pealkirjade list</a>
-                    <a href="{% url 'app_admin:index' %}">Homepage</a>
+                    <p><a href="{% url 'app_admin:menuHeadlines_list' %}">Pealkirjade list</a></p>
+                    <p class="mt-1"><a href="{% url 'app_admin:menuHeadlines_list' %}">Avalehele</a></p>
                 </div>
                 <script>
                     $(function () {

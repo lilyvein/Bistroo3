@@ -27,7 +27,7 @@ class ManagerRequiredMixin(UserPassesTestMixin):
 
 
 class HomeView(ManagerRequiredMixin, TemplateView):
-    template_name = 'app_admin/index.html'
+    template_name = 'app_admin/menuHeadlines_list.html'
 
 
 class CategoryListView(ManagerRequiredMixin, ListView):
@@ -70,7 +70,7 @@ class CategoryDeleteView(ManagerRequiredMixin, DeleteView):
 class MenuHeadlinesView(ManagerRequiredMixin, CreateView):
     model = MenuHeadlines
     form_class = MenuHeadlinesForm
-    success_url = reverse_lazy('app_public:index')
+    success_url = reverse_lazy('app_public:menuHeadlines_list')
 
 
 class MenuHeadlinesListView(ManagerRequiredMixin, ListView):
@@ -167,7 +167,7 @@ class FoodMenuCreateView(ManagerRequiredMixin, CreateView):
 class FoodMenuListView(ManagerRequiredMixin, ListView):
     model = FoodMenu
     template_name = 'app_admin/foodmenu_list.html'
-    paginate_by = 10
+    paginate_by = 14
 
     def get_context_data(self, **kwargs):
         context = super(FoodMenuListView, self).get_context_data(**kwargs)
