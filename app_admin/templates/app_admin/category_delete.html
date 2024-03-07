@@ -1,20 +1,29 @@
 {% extends 'base_admin.html' %}
 {% block main %}
 
-
-<div class="container mt-5" style="background-color: white;">
-
-    <h2 style="color:red;">Kas kustutan selle kategooria?</h2>
-    <h5>"{{ category.name }}"</h5>
+    <div class="container col-8 mt-5 mb-5  bg-body-tertiary rounded shadow">
+        <div class="row">
+            <div class="col-12 mx-auto mt-4">
 
 
-    <form method="post">
-        {% csrf_token %}
+                <h2>Kas kustutan selle kategooria?</h2>
 
-        <input type="submit" value="Kustuta" class="btn btn-danger">
-    </form>
+                <h5 style="color: red;">"{{ category.name }}"</h5>
 
-    <p><a href="{% url 'app_admin:category_list' %}">Kategooriate nimekiri</a></p>
 
-</div>
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="alert alert-danger mt-4" role="alert">
+                        <p>Kui kustutad selle kategooria, siis kustuvad arhiivist ära kõik toidud, mis on selle
+                            kategooriaga seotud.</p>
+                    </div>
+
+                    <input type="submit" value="Kustuta" class="btn btn-danger mt-5 mb-4">
+                </form>
+
+                <p><a href="{% url 'app_admin:category_list' %}">Kategooriate nimekiri</a></p>
+
+            </div>
+        </div>
+    </div>
 {% endblock %}
