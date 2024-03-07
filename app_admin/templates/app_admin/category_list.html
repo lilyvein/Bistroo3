@@ -1,9 +1,19 @@
 {% extends 'base_admin.html' %}
 {% block main %}
-   <div class="container col-8 mt-5 mb-5  bg-body-tertiary rounded shadow">
+    <div class="container col-8 mt-5 mb-5  bg-body-tertiary rounded shadow">
         <div class="row">
             <div class="col-8 mx-auto mt-5">
                 <h3>Kategooriad</h3>
+
+                {% if messages %}
+                    <div class="messages">
+                        {% for message in messages %}
+                            <p{% if message.tags %} class="alert alert-danger"{% endif %}>{{ message }}</p>
+                        {% endfor %}
+                    </div>
+
+                {% endif %}
+
                 <table class="table table-bordered table-hover shadow">
                     <thead>
                     <tr class="text-center">
@@ -26,7 +36,8 @@
                     {% endfor %}
                     </tbody>
                 </table>
-                <a href="{% url 'app_admin:category_create' %}" role="button" class="btn btn-success mb-5">Lisa uus kategooria</a>
+                <a href="{% url 'app_admin:category_create' %}" role="button" class="btn btn-success mb-5">Lisa uus
+                    kategooria</a>
             </div>
         </div>
     </div>

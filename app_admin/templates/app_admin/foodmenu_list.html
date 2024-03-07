@@ -2,9 +2,9 @@
 {% load is_menu_old %}
 
 {% block main %}
-    <div class="container col-10" style="background-color: white; margin-top: 50px;">
+    <div class="container col-8 mt-5 mb-5  bg-body-tertiary rounded shadow">
         <div class="row">
-            <div class="col-10 mx-auto mt-5">
+            <div class="col-10 mx-auto mt-2">
                 <h1 class="h2 mt-4">Menüüde nimekiri</h1>
                 <table class="table table-bordered table-hover mt-3">
                     <thead>
@@ -44,7 +44,9 @@
                     <a href="{% url 'app_admin:foodmenu_create' %}" role="button" class="btn btn-primary w-100">Lisa
                         toit</a>
                 </p>
+            {% if page_obj.paginator.num_pages > 1 %}
                 {% include 'pagination.html' %}
+            {% endif %}
             </div>
         </div>
     </div>

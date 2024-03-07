@@ -7,13 +7,18 @@ from .models import *
 
 
 class CategoryUpdateForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(CategoryUpdateForm, self).__init__(*args, **kwargs)
+        self.fields['number'].label = 'Kategooria ID' # vorm eesti keelseks
+        self.fields['name'].label = 'Kategooria nimi'
     class Meta:
         model = Category
         fields = ['number', 'name']
         widgets = {
-            'number': forms.TextInput(attrs={'type': 'text', 'class': 'form-control mb-2'}),
-            'name': forms.TextInput(attrs={'type': 'text', 'class': 'form-control'}),
+            'number': forms.TextInput(attrs={'type': 'text', 'class': 'form-control mb-2', 'placeholder': 'Sisesta kategooria number'}),
+            'name': forms.TextInput(attrs={'type': 'text', 'class': 'form-control', 'placeholder':'Sisesta kategooria nimi' }),
         }
+
 
 
 class MenuHeadlinesForm(forms.ModelForm):
@@ -31,8 +36,8 @@ class MenuHeadlinesForm(forms.ModelForm):
         fields = ['date', 'teema', 'soovitab', 'valmistas']
         widgets = {
             # 'date': django.forms.TextInput(attrs={'type': 'date', 'class': 'form-control'}),
-            'date': TextInput(attrs={'type': 'text',  'id': 'date', 'class': 'form-control',
-                                     'placeholder': 'Kliki kuupäeva valimiseks', 'readonly': 'readonly'}),
+            'date': django.forms.DateInput(attrs={'type': 'text',  'id': 'date', 'class': 'form-control',
+                                     'placeholder': 'Kliki kuupäeva valimiseks', 'readonly': 'readonly'}, format='%d.%m.%Y'),
 
             'teema': django.forms.TextInput(attrs={'type': 'text', 'class': 'form-control'}),
             'soovitab': django.forms.TextInput(attrs={'type': 'text', 'class': 'form-control'}),
@@ -62,7 +67,9 @@ class MenuHeadlinesUpdateForm(forms.ModelForm):
         model = MenuHeadlines
         fields = ['date', 'teema', 'soovitab', 'valmistas']
         widgets = {
-            'date': django.forms.TextInput(attrs={'type': 'date', 'class': 'form-control'}),
+            # 'date': django.forms.TextInput(attrs={'type': 'date', 'class': 'form-control'}),
+            'date': django.forms.DateInput(attrs={'type': 'text',  'id': 'date', 'class': 'form-control',
+                                     'placeholder': 'Kliki kuupäeva valimiseks', 'readonly': 'readonly'}, format='%d.%m.%Y'),
             'teema': django.forms.TextInput(attrs={'type': 'text', 'class': 'form-control'}),
             'soovitab': django.forms.TextInput(attrs={'type': 'text', 'class': 'form-control'}),
             'valmistas': django.forms.TextInput(attrs={'type': 'text', 'class': 'form-control'}),

@@ -1,42 +1,48 @@
 {% extends 'base_admin.html' %}
 {% load is_menu_old %}  <!-- Eeldame, et teil on 'is_menu_old' filter korrektselt defineeritud -->
 {% block main %}
-<div class="container col-10" style="background-color: white; margin-top: 50px;">
-    <div class="row">
-        <div class="col-10 mx-auto mt-5">
-            <h3>Teemade pealkirjad</h3>
-            <table class="table table-bordered table-hover">  <!-- Muutsin 'table-hoover' õigeks klassiks 'table-hover' -->
-                <thead>
-                <tr class="text-center">
-                    <th>Kuupäev</th>
-                    <th>Teema päev</th>
-                    <th>Peakokk soovitab</th>
-                    <th>Valmistas</th>
-                    <th>Tegevus</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for menuHeadline in menuHeadlines %}
-                    <tr>
-                        <td>{{ menuHeadline.date|date:"d.m.Y" }}</td>
-                        <td>{{ menuHeadline.teema }}</td>
-                        <td>{{ menuHeadline.soovitab }}</td>
-                        <td>{{ menuHeadline.valmistas }}</td>
-                        <td class="text-center">
-                            {% if not menuHeadline.date|date:"d.m.Y"|is_menu_old %}
-                                <a href="{% url 'app_admin:menuHeadlines_update' pk=menuHeadline.id %}" class="text-primary">Uuenda</a>
-                            {% else %}
-                                Seda menüüd ei saa muuta.
-                            {% endif %}
-                            <a href="{% url 'app_admin:menuHeadlines_delete' pk=menuHeadline.id %}" class="text-danger">Kustuta</a>
-                        </td>
+    <div class="container col-10" style="background-color: white; margin-top: 50px;">
+        <div class="row">
+            <div class="col-10 mx-auto mt-5">
+                <h3>Teemade pealkirjad</h3>
+                <table class="table table-bordered table-hover">
+                    <!-- Muutsin 'table-hoover' õigeks klassiks 'table-hover' -->
+                    <thead>
+                    <tr class="text-center">
+                        <th>Kuupäev</th>
+                        <th>Teema päev</th>
+                        <th>Peakokk soovitab</th>
+                        <th>Valmistas</th>
+                        <th>Tegevus</th>
                     </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-            <a href="{% url 'app_admin:menuHeadlines_create' %}" role="button" class="btn btn-primary mb-5">Lisa uus menüü pealkiri</a>
-            {% include 'pagination.html' %}
+                    </thead>
+                    <tbody>
+                    {% for menuHeadline in menuHeadlines %}
+                        <tr>
+                            <td>{{ menuHeadline.date|date:"d.m.Y" }}</td>
+                            <td>{{ menuHeadline.teema }}</td>
+                            <td>{{ menuHeadline.soovitab }}</td>
+                            <td>{{ menuHeadline.valmistas }}</td>
+                            <td class="text-center">
+                                {% if not menuHeadline.date|date:"d.m.Y"|is_menu_old %}
+                                    <a href="{% url 'app_admin:menuHeadlines_update' pk=menuHeadline.id %}"
+                                       class="text-primary">Uuenda</a>
+                                {% else %}
+                                    Seda menüüd ei saa muuta.
+                                {% endif %}
+                                <a href="{% url 'app_admin:menuHeadlines_delete' pk=menuHeadline.id %}"
+                                   class="text-danger">Kustuta</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                <a href="{% url 'app_admin:menuHeadlines_create' %}" role="button" class="btn btn-primary mb-5">Lisa uus
+                    menüü pealkiri</a>
+                {% if page_obj.paginator.num_pages > 1 %}
+                    {% include 'pagination.html' %}
+                {% endif %}
+            </div>
         </div>
     </div>
-</div>
 {% endblock %}

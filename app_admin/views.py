@@ -2,7 +2,7 @@ import urllib.parse
 from urllib.request import urlopen
 import json
 
-from django.db.models import Count, Q
+from django.db.models import Count, Q, ProtectedError
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views.generic import (TemplateView, ListView, CreateView, UpdateView, DeleteView, DetailView, FormView)
@@ -57,6 +57,14 @@ class CategoryDeleteView(ManagerRequiredMixin, DeleteView):
     model = Category
     success_url = reverse_lazy('app_admin:category_list')
 
+    def post(self, request, *args, **kwargs):
+        try:
+            return self.delete(request, *args, **kwargs)
+        except ProtectedError:
+            messages.warning(request, "Seda kategooriat ei saa kustutada")
+            return render(request, "app_admin/category_list.html", context={'categories': Category.objects.all()})
+
+
 
 
 class MenuHeadlinesView(ManagerRequiredMixin, CreateView):
@@ -84,6 +92,19 @@ class MenuHeadlinesUpdateView(ManagerRequiredMixin, UpdateView):
     success_url = reverse_lazy('app_admin:menuHeadlines_list')
     form_class = MenuHeadlinesUpdateForm
     context_object_name = 'menuHeadline'
+
+    def post(self, request, *args, **kwargs):
+        my_data = request.POST
+        my_date = my_data['date']
+        print(my_date)
+        try:
+            new_date = datetime.datetime.strptime(my_date, '%d.%m.%Y').strftime('%Y-%m-%d')
+            my_data._mutable = True
+            my_data['date'] = new_date
+            my_data._mutable = False
+        except ValueError:
+            return super().post(request, *args, **kwargs)
+        return super().post(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -136,12 +157,11 @@ class FoodMenuCreateView(ManagerRequiredMixin, CreateView):
         )
 
         return super().form_valid(form)
+
     def get_form(self, *args, **kwargs):
         form = super(FoodMenuCreateView, self).get_form(*args, **kwargs)
         form.fields['date'].queryset = MenuHeadlines.objects.all().filter(date__gte=date.today())
         return form
-
-
 
 
 class FoodMenuListView(ManagerRequiredMixin, ListView):
@@ -159,7 +179,6 @@ class FoodMenuUpdateView(ManagerRequiredMixin, SingleObjectMixin, FormView):
     model = FoodMenu
     form_class = FoodMenuUpdateForm
     template_name = 'app_admin/foodmenu_update.html'
-
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object(queryset=FoodMenu.objects.all())
