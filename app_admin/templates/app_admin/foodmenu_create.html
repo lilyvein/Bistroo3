@@ -1,16 +1,12 @@
 {% extends 'base_admin.html' %}
-
 {% block main %}
     <div class="container col-12 mt-5 mb-5  bg-body-tertiary rounded shadow">
         <div class="row">
             <div class="col-8 mx-auto mt-5">
                 <h3>Toitude lisamine</h3>
-
-                {{ test }}
                 <div class="alert alert-info" role="alert">
                     <span>Toidu lisamiseks vali soovitud kuupäev ja vastav kategooria.</span>
                 </div>
-
                 {% if messages %}
                     {% for message in messages %}
                         <div class="alert alert-{{ message.tags }}">{{ message.message }}</div>
@@ -39,7 +35,6 @@
                             {% endfor %}
                         </div>
                     {% endfor %}
-
                     <p class="pt-4">
                         <button type="submit" class="btn btn-success w-100 mb-2">Lisa toit menüüsse</button>
                         <a href="{% url 'app_admin:foodmenu_list' %}" role="button"
@@ -49,6 +44,4 @@
             </div>
         </div>
     </div>
-
-
 {% endblock main %}

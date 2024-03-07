@@ -4,7 +4,7 @@ from . import views
 app_name = 'app_admin'
 
 urlpatterns = [
-    path('', views.MenuHeadlinesListView.as_view(), name='menuHeadlines_list'),  # see teeb avalehele menüüde pealkirja lehe
+    path('', views.MenuHeadlinesListView.as_view(), name='menuHeadlines_list'),  # see teeb avalehele menüüde pealkirja
     # path('', views.HomeView.as_view(), name='index'),  # homepage
     path('category_list/', views.CategoryListView.as_view(), name='category_list'),
     path('category_create/', views.CategoryCreateView.as_view(), name='category_create'),
@@ -26,6 +26,5 @@ urlpatterns = [
     path('history_search/', views.SearchResultsListView.as_view(), name='history_search'),
     path('history_menu/menu/', views.OldMenuListView.as_view(), name='history_menu'),
     path('history_menu/menu/date/<str:date>', views.OldMenuListView.as_view(), name='history_menu'),
-
 
 ]

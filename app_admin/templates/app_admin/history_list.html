@@ -1,5 +1,4 @@
 {% extends 'base_admin.html' %}
-
 {% block main %}
     <div class="container col-12 mt-5 mb-5  bg-body-tertiary rounded shadow">
         <div class="row">
@@ -11,7 +10,6 @@
                 <div class="container mt-3 mb-5 bg-white">
                     <div class="row border border-secondary-subtle shadow">
                         <h5 class="fw-bold mt-2">Otsing menüü toitudest</h5>
-
                         <p style="color:#d9951a">Sisesta toidu nimi mida soovid leida</p>
                         <form action="{% url 'app_admin:history_search' %}" method="get">
                             <label for="q" class="form-label">Toidu nimi:</label>
@@ -20,7 +18,6 @@
                         </form>
                     </div>
                 </div>
-
                 <div class="container mb-5 bg-white">
                     <div class="row border border-secondary-subtle shadow">
                         <h5 class="fw-bold mt-2">Vanad menüüd</h5>
