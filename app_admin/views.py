@@ -112,7 +112,12 @@ class MenuHeadlinesUpdateView(ManagerRequiredMixin, UpdateView):
         return context
 
     def form_valid(self, form):
-        # Kui vorm on kehtiv, võite teha siin vajalikke toiminguid.
+        messages.add_message(
+            self.request,
+            messages.SUCCESS,
+            'Menüü pealkiri on uuendatud.'
+        )
+
         return super().form_valid(form)
 
 
@@ -121,6 +126,11 @@ class MenuHeadlinesDeleteView(ManagerRequiredMixin, DeleteView):
     model = MenuHeadlines
     success_url = reverse_lazy('app_admin:menuHeadlines_list')
 
+    def post(self, request, *args, **kwargs):
+        response = super(MenuHeadlinesDeleteView, self).post(request, *args, **kwargs)
+        messages.success(request, 'Menüü pealkiri on edukalt kustutatud.')  # Lisab eduka sõnumi
+        return response
+
 
 class MenuHeadlinesCreateView(ManagerRequiredMixin, CreateView):
     template_name = 'app_admin/menuHeadlines_create.html'
@@ -128,6 +138,7 @@ class MenuHeadlinesCreateView(ManagerRequiredMixin, CreateView):
     # fields = '__all__'  # All fields into form
     success_url = reverse_lazy('app_admin:menuHeadlines_list')
     form_class = MenuHeadlinesForm
+
 
     def post(self, request, *args, **kwargs):
         my_data = request.POST
@@ -141,6 +152,15 @@ class MenuHeadlinesCreateView(ManagerRequiredMixin, CreateView):
         except ValueError:
             return super().post(request, *args, **kwargs)
         return super().post(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        messages.add_message(
+            self.request,
+            messages.SUCCESS,
+            'Menüü on lisatud'
+        )
+
+        return super().form_valid(form)
 
 
 class FoodMenuCreateView(ManagerRequiredMixin, CreateView):

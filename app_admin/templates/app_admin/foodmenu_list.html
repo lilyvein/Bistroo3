@@ -12,10 +12,13 @@
                         <li>Uuema kuupäevaga toidud kuvatakse ennem.</li>
                         <li>Muuta ja kustutada saab tänase ja tuleviku kuupäevaga toitusid, mineviku saab ainult
                             vaadata.</li>
-                        <li>Üksikut toitu kategooriast kustutada ei saa.
-                            Muutmisel tuleb teha toidu valikukasti Delete linnuke</li>
+
                     </ul>
                 </div>
+            <p class="pt-2 mb-5">
+                    <a href="{% url 'app_admin:foodmenu_create' %}" role="button" class="btn btn-primary w-100">Lisa
+                        toit</a>
+                </p>
                 <table class="table table-bordered table-hover shadow mt-3">
                     <thead>
                     <tr class="text-center">
@@ -28,19 +31,12 @@
                         {% now "d.m.Y" as today %}
                         {% for menu in object_list %}
                             <tr>
-                                <td>{{ menu.date }} {{ menu.category }}</td>
+                                <td>  <a href="{% url 'app_admin:history_menu' date=menu.date %}">{{ menu.date }}</a> {{ menu.category }}</td>
                                 <td class="text-center">
-                                    <a href="{% url 'app_admin:foodmenu_detail' pk=menu.id %}" class="text-warning">
-                                        <i class="fa-solid fa-eye" style="color: #0000ff;" title="Vaata"></i>
-                                    </a>
+                                    <a href="{% url 'app_admin:foodmenu_detail' pk=menu.id %}" class="text-warning me-2"><i class="fa-solid fa-eye" style="color: #0000ff;" title="Vaata"></i></a>
                                     {% if not menu.date|striptags|is_menu_old %}
-                                        <a href="{% url 'app_admin:foodmenu_update' pk=menu.id %}" class="text-primary"
-                                           style="margin-left: 10px; margin-right: 10px;">
-                                            <i class="far fa-edit" style="color: #0000ff;" title="Muuda"></i>
-                                        </a>
-                                        <a href="{% url 'app_admin:foodmenu_delete' pk=menu.id %}" class="text-danger">
-                                            <i class="fas fa-trash-alt" style="color: #ff0800;" title="Kustuta"></i>
-                                        </a>
+                                        <a href="{% url 'app_admin:foodmenu_update' pk=menu.id %}" class="text-primary me-2"><i class="far fa-edit" style="color: #0000ff;" title="Muuda"></i></a>
+                                        <a href="{% url 'app_admin:foodmenu_delete' pk=menu.id %}" class="text-danger"><i class="fas fa-trash-alt" style="color: #ff0800;" title="Kustuta"></i></a>
                                     {% endif %}
                                 </td>
                             </tr>
@@ -52,10 +48,7 @@
                     {% endif %}
                     </tbody>
                 </table>
-                <p class="pt-2 mb-5">
-                    <a href="{% url 'app_admin:foodmenu_create' %}" role="button" class="btn btn-primary w-100">Lisa
-                        toit</a>
-                </p>
+
                 {% if page_obj.paginator.num_pages > 1 %}
                     {% include 'pagination.html' %}
                 {% endif %}

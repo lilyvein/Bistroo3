@@ -1,11 +1,12 @@
 {% extends 'base_admin.html' %}
 {% load is_menu_old %}  <!-- Eeldame, et teil on 'is_menu_old' filter korrektselt defineeritud -->
 {% block main %}
-   <div class="container mt-5 mb-5  bg-body-tertiary rounded shadow" >
+
+    <div class="container mt-5 mb-5  bg-body-tertiary rounded shadow">
         <div class="row">
             <div class="col-10 mx-auto mt-5">
                 <h3>Teemade pealkirjad</h3>
-                <div class="alert alert-info" role="alert">
+                <div class="bg-info-subtle text-black p-3 rounded mb-2">
                     <ul>
                         <li>Siin on nimekiri menüüdest mis on sisestatud.</li>
                         <li>Menüüd mis on tänase või tuleviku kuupäevaga saab muuta ja kustutada.</li>
@@ -14,6 +15,16 @@
                         </li>
                     </ul>
                 </div>
+
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-success {{ message.tags }} alert-dismissible fade show" role="alert">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+
+
                 <table class="table table-bordered table-hover shadow">
                     <!-- Muutsin 'table-hoover' õigeks klassiks 'table-hover' -->
                     <thead>
@@ -31,21 +42,18 @@
                         <td>{{ menuHeadline.date|date:"d.m.Y" }}</td>
                         <td>{{ menuHeadline.teema }}</td>
                         <td>{{ menuHeadline.soovitab }}</td>
-                        <td>{{ menuHeadline.valmistas }}</td>
+                        <td>{% if menuHeadline.valmistas %}{{ menuHeadline.valmistas }}{% endif %}</td>
                         <td class="text-center">
                             {% if not menuHeadline.date|date:"d.m.Y"|is_menu_old %}
                                 <a href="{% url 'app_admin:menuHeadlines_update' pk=menuHeadline.id %}"
-                                   class="text-primary" style="margin-right: 10px;">
-                                     <i class="far fa-edit" style="color: #0000ff;" title="Muuda"></i>
-                                </a>
+                                   class="text-primary"><i class="far fa-edit" style="color: #0000ff" title="Muuda"></i></a>
                             {% else %}
-                                <i class="fas fa-exclamation-circle" style="color: #800040; margin-right: 10px;"></i>
+                                <i class="fas fa-exclamation-circle" style="color: #800040"></i>
                             {% endif %}
-                            <a href="{% url 'app_admin:menuHeadlines_delete' pk=menuHeadline.id %}" class="text-danger">
-                                <i class="fas fa-trash-alt" style="color: #ff0800;" title="Kustuta"></i>
+                            <a href="{% url 'app_admin:menuHeadlines_delete' pk=menuHeadline.id %}" class="text-danger"><i
+                                    class="fas fa-trash-alt" title="Kustuta"></i>
                             </a>
                         </td>
-
                     {% endfor %}
                     </tbody>
                 </table>
@@ -57,4 +65,17 @@
             </div>
         </div>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Otsib kõiki teateid
+            const alerts = document.querySelectorAll('.alert');
+            alerts.forEach(function (alert) {
+                // Seab taimeri, mis peidab teate 5 sekundi möödudes
+                setTimeout(function () {
+                    alert.style.display = 'none';
+                }, 5000);
+            });
+        });
+    </script>
+
 {% endblock %}

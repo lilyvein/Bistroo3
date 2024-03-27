@@ -5,22 +5,32 @@
         <div class="row">
             <div class="col-8 mx-auto mt-5">
                 {% if messages %}
-                    <ul class="messages">
+                    <div id="messages">
                         {% for message in messages %}
-                            <li>{{ message }}</li>
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                {{ message }}
+                            </div>
                         {% endfor %}
-                    </ul>
+                    </div>
                 {% endif %}
+
                 <br>
                 <h3>Menüü detailid: {{ foodmenu }}</h3>
                 <hr>
                 {% for food in foodmenu.food_fooditem.all %}
                     <div>Toit: {{ food.food }}</div>
-                    <div>Hind: {{ food.full_price }}</div>
-                    <div>Poolik hind: {{ food.half_price }}</div>
-                    <div>Näitab menüüs: {{ food.chow_in_menu }}</div>
+                    {% if food.full_price == 0.00 %}
+                        <div>Hind: Toit on hinna sees.</div>
+                    {% else %}
+                        <div>Hind: {{ food.full_price }}</div>
+                    {% endif %}
+                    {% if food.half_price %}
+                        <div>Poolik hind: {{ food.half_price }}</div>
+                    {% endif %}
+                    <div>Näitab menüüs: {% if food.show_in_menu %}Jah{% else %}Ei{% endif %}</div>
                     <hr>
                 {% endfor %}
+
             </div>
             <div class="col-8 mx-auto mb-5">
                 {% if  not foodmenu.date|striptags|is_menu_old %}
@@ -36,4 +46,17 @@
             </div>
         </div>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            // Kontrollib, kas teavitusi sisaldav element on olemas
+            let messages = document.getElementById('messages');
+            if (messages) {
+                // Ootab 5 sekundit ja seejärel peidab teavitused
+                setTimeout(function () {
+                    messages.style.display = 'none';
+                }, 5000); // 5000 millisekundit = 5 sekundit
+            }
+        });
+    </script>
+
 {% endblock main %}
